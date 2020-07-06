@@ -1,7 +1,9 @@
-# 面试人表
 from sqlalchemy import Column, Integer, String
 
 from create_db import Base, Session
+
+t = type("hello", (Base,),
+         {"__tablename__": "hello", "id": Column(Integer, autoincrement=True, primary_key=True)})
 
 
 class Shares(Base):
