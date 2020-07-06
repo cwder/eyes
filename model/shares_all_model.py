@@ -22,3 +22,16 @@ class Shares(Base):
             session.commit()
         except Exception as e:
             session.rollback()
+
+    @staticmethod
+    def createShares(code, name):
+        session = Session()
+        result = session.query(Shares).all()
+        for i in result:
+            pass
+        pass
+
+
+if __name__ == '__main__':
+    Shares.getAllShares()
+    print("aa")

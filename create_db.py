@@ -12,7 +12,8 @@ session_factory = sessionmaker(bind=engine)
 Session = scoped_session(session_factory)
 # 基本类
 Base = declarative_base()
-from model.models import *
 
 # 创建表
-Base.metadata.create_all(engine)
+if __name__ == '__main__':
+    from model.shares_all_model import *
+    Base.metadata.create_all(engine)

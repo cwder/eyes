@@ -3,7 +3,7 @@ import re
 import requests
 from bs4 import BeautifulSoup as bs
 
-from model.models import Shares
+from model.shares_all_model import Shares
 
 url = "http://quote.eastmoney.com/center/gridlist.html#hs_a_board"
 # 东方财富网个股
