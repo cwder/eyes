@@ -13,7 +13,7 @@ Session = scoped_session(session_factory)
 # 基本类
 Base = declarative_base()
 
-# 创建表
-if __name__ == '__main__':
-    from model.shares_all_model import *
-    Base.metadata.create_all(engine)
+from model.shares import *
+# from action import single_action
+
+Base.metadata.create_all(engine)

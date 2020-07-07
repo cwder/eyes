@@ -32,6 +32,6 @@ class Shares(Base):
         pass
 
 
-if __name__ == '__main__':
-    Shares.getAllShares()
-    print("aa")
+# if __name__ == '__main__':
+#     Shares.getAllShares()
+#     print("aa")

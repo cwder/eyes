@@ -3,7 +3,7 @@ import re
 import requests
 from bs4 import BeautifulSoup as bs
 
-from model.shares_all_model import Shares
+from model.shares import Shares
 
 headers = {
     "Accept": "*/*",

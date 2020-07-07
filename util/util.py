@@ -1,10 +1,10 @@
 import requests
 
 
-class Http:
+class Util:
 
     @staticmethod
-    def http_warp(url, encoding='utf8'):
+    def http_wrap(url, encoding='utf8'):
         def decorated(func):
             headers = {
                 "Accept": "*/*",
@@ -20,5 +20,5 @@ class Http:
             response = requests.get(url, timeout=10, headers=headers)
             response.encoding = encoding
             func(response.text)
-        return decorated
 
+        return decorated
