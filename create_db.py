@@ -1,6 +1,5 @@
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base, DeclarativeMeta
-from sqlalchemy import Column, Integer, String
 
 # 连接测试数据库
 from sqlalchemy.orm import sessionmaker, scoped_session
@@ -13,7 +12,5 @@ Session = scoped_session(session_factory)
 # 基本类
 Base = declarative_base()
 
-from model.shares import *
-# from action import single_action
 
-Base.metadata.create_all(engine)
+
