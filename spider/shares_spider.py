@@ -1,4 +1,5 @@
 import re
+import time
 from datetime import datetime
 
 import requests
@@ -15,7 +16,7 @@ class Share(BaseSpider):
         return detail_url
 
     def parseSingleHtml(self, url):
-        response = requests.get(url, timeout=10, headers=self.headers)
+        response = requests.get(url, timeout=20, headers=self.headers)
         response.encoding = 'utf8'
         self.text = response.text
         p1 = re.compile(r'[(](.*?)[)]', re.S)
@@ -33,10 +34,17 @@ class Share(BaseSpider):
         page = 1
         while self.parseSingleHtml(self.get_detail_url(page)):
             page = page + 1
-        print(self.data)
+            time.sleep(0.5)
 
     def invokeCtable(self):
         inspector = inspect(engine)
+        # Shares = type("Shares", (Base,), {
+        #     "id": Column(Integer, autoincrement=True, primary_key=True),
+        #     "__tablename__": "Shares",
+        #     "code": Column(String(50)),
+        #     "name": Column(String(50))
+        # })
+
         for info in self.data:
             table_name = info['f12']
             # 获取所有表
@@ -47,18 +55,21 @@ class Share(BaseSpider):
                     or table_name.startswith("602") or table_name.startswith("000"):
                 field = dict()
                 field["id"] = Column(Integer, autoincrement=True, primary_key=True)
-                field["__tablename__"] = info['f12']
+                field["__tablename__"] = table_name
                 field["create_time"] = Column(DateTime, default=datetime.now)
                 for key in info:
                     field[key] = Column(String(50))
-                type(info['f12'], (Base,), field)
+                type(table_name, (Base,), field)
         Base.metadata.create_all(engine)
 
     def insertTable(self):
-        super().insertTable()
+        inspector = inspect(engine)
+        for table_name in inspector.get_table_names():
+            obj = eval(table_name + '()')
 
 
 if __name__ == '__main__':
     info = Share()
     info.parseAll()
     info.invokeCtable()
+    info.insertTable()
