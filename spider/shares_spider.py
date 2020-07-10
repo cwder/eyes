@@ -5,7 +5,7 @@ from datetime import datetime
 import requests
 from sqlalchemy import Column, Integer, String, DateTime, inspect
 
-from create_db import Base, engine
+from create_db import Base, engine, Session
 from spider.base_spider import BaseSpider
 
 
@@ -63,9 +63,15 @@ class Share(BaseSpider):
         Base.metadata.create_all(engine)
 
     def insertTable(self):
-        inspector = inspect(engine)
-        for table_name in inspector.get_table_names():
-            obj = eval(table_name + '()')
+        tables = []
+        for info in self.data:
+            table_name = info['f12']
+            table = eval(table_name + "()")
+            table.__dict__.update(info)
+            tables.append(table)
+        session = Session()
+        session.add_all(tables)
+        session.commit()
 
 
 if __name__ == '__main__':
