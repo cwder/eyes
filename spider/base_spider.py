@@ -1,8 +1,14 @@
+from datetime import datetime
+
 import requests
+from sqlalchemy import Column, Integer, DateTime, String
+
+from create_db import Base
 
 
 class BaseSpider:
-    data = []
+    mapping = dict()
+    data_list = []
     headers = {
         "Accept": "*/*",
         "Accept-Encoding": "gzip, deflate",
@@ -23,6 +29,17 @@ class BaseSpider:
 
     def insertTable(self):
         pass
+
+    @staticmethod
+    def createObj(table_name, info):
+        field = dict()
+        field["id"] = Column(Integer, autoincrement=True, primary_key=True)
+        field["__tablename__"] = table_name
+        field["create_time"] = Column(DateTime, default=datetime.now)
+        for key in info:
+            field[key] = Column(String(50))
+        obj = type(table_name, (Base,), field)()
+        return obj
 
     def work(self):
         self.parseHtml()

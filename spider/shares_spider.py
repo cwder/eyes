@@ -24,7 +24,8 @@ class Share(BaseSpider):
         if res is not None:
             try:
                 data_list = eval(res.group()[1:-1])['data']['diff']
-                self.data.extend(data_list)
+                # data_list [{'f1': 2, 'f2': 252.61, 'f3': 468.05, 'f4': 208.14,
+                self.data_list.extend(data_list)
             except Exception as e:
                 return False
             return True
@@ -38,37 +39,27 @@ class Share(BaseSpider):
 
     def invokeCtable(self):
         inspector = inspect(engine)
-        # Shares = type("Shares", (Base,), {
-        #     "id": Column(Integer, autoincrement=True, primary_key=True),
-        #     "__tablename__": "Shares",
-        #     "code": Column(String(50)),
-        #     "name": Column(String(50))
-        # })
-
-        for info in self.data:
+        for info in self.data_list:
             table_name = info['f12']
-            # 获取所有表
-            if table_name in inspector.get_table_names():
-                print("忽略 " + table_name)
-                continue
-            if table_name.startswith("600") or table_name.startswith("601") \
-                    or table_name.startswith("602") or table_name.startswith("000"):
-                field = dict()
-                field["id"] = Column(Integer, autoincrement=True, primary_key=True)
-                field["__tablename__"] = table_name
-                field["create_time"] = Column(DateTime, default=datetime.now)
-                for key in info:
-                    field[key] = Column(String(50))
-                type(table_name, (Base,), field)
+            print("invokeCtable----------" + table_name)
+            if (table_name.startswith("6") or table_name.startswith("0")):
+                if (table_name not in inspector.get_table_names()):
+                    self.mapping[table_name] = BaseSpider.createObj(table_name, info)
+            else:
+                self.data_list.remove(info)
         Base.metadata.create_all(engine)
 
     def insertTable(self):
         tables = []
-        for info in self.data:
+        print(self.data_list)
+        print(self.mapping)
+        for info in self.data_list:
             table_name = info['f12']
-            table = eval(table_name + "()")
-            table.__dict__.update(info)
-            tables.append(table)
+            print("insertTable----------" + table_name)
+            table = self.mapping.get(table_name)
+            if(table is not None):
+                table.__dict__.update(info)
+                tables.append(table)
         session = Session()
         session.add_all(tables)
         session.commit()
