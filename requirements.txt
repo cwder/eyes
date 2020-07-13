@@ -2,3 +2,4 @@ FastAPI
 Uvicorn
 BeautifulSoup4
 sqlalchemy
+fishbase
