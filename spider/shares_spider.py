@@ -24,6 +24,7 @@ class Share(BaseSpider):
         if res is not None:
             try:
                 data_list = eval(res.group()[1:-1])['data']['diff']
+                print(data_list)
                 # data_list [{'f1': 2, 'f2': 252.61, 'f3': 468.05, 'f4': 208.14,
                 self.data_list.extend(data_list)
             except Exception as e:
@@ -41,23 +42,18 @@ class Share(BaseSpider):
         inspector = inspect(engine)
         for info in self.data_list:
             table_name = info['f12']
-            print("invokeCtable----------" + table_name)
             if (table_name.startswith("6") or table_name.startswith("0")):
                 if (table_name not in inspector.get_table_names()):
                     self.mapping[table_name] = BaseSpider.createObj(table_name, info)
-            else:
-                self.data_list.remove(info)
         Base.metadata.create_all(engine)
 
     def insertTable(self):
         tables = []
         print(self.data_list)
-        print(self.mapping)
         for info in self.data_list:
             table_name = info['f12']
-            print("insertTable----------" + table_name)
             table = self.mapping.get(table_name)
-            if(table is not None):
+            if (table is not None):
                 table.__dict__.update(info)
                 tables.append(table)
         session = Session()

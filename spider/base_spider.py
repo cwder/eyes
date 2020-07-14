@@ -21,7 +21,7 @@ class BaseSpider:
     }
     requests.adapters.DEFAULT_RETRIES = 5
 
-    def parseHtml(self):
+    def parseAll(self):
         pass
 
     def invokeCtable(self):
@@ -42,6 +42,6 @@ class BaseSpider:
         return obj
 
     def work(self):
-        self.parseHtml()
+        self.parseAll()
         self.invokeCtable()
         self.insertTable()
