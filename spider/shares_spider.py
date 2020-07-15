@@ -3,7 +3,7 @@ import time
 from datetime import datetime
 
 import requests
-from sqlalchemy import Column, Integer, String, DateTime, inspect
+from sqlalchemy import Column, Integer, String, DateTime, inspect, MetaData
 
 from create_db import Base, engine, Session
 from spider.base_spider import BaseSpider
@@ -44,12 +44,16 @@ class Share(BaseSpider):
             table_name = info['f12']
             if (table_name.startswith("6") or table_name.startswith("0")):
                 if (table_name not in inspector.get_table_names()):
-                    self.mapping[table_name] = BaseSpider.createObj(table_name, info)
+                    BaseSpider.createObj(table_name, info)
         Base.metadata.create_all(engine)
 
     def insertTable(self):
         tables = []
         print(self.data_list)
+        m = MetaData()
+        m.reflect(engine)
+        for table in m.tables.values():
+            self.mapping[table.name] = table
         for info in self.data_list:
             table_name = info['f12']
             table = self.mapping.get(table_name)
