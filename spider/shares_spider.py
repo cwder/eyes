@@ -3,7 +3,7 @@ import time
 from datetime import datetime
 
 import requests
-from sqlalchemy import Column, Integer, String, DateTime, inspect, MetaData
+from sqlalchemy import Column, Integer, String, DateTime, inspect, MetaData, func
 
 from create_db import Base, engine, Session
 from spider.base_spider import BaseSpider
@@ -58,8 +58,17 @@ class Share(BaseSpider):
             table_name = info['f12']
             table = self.mapping.get(table_name)
             if (table is not None):
-                table.__dict__.update(info)
-                tables.append(table)
+                session = Session()
+                tb_info = session.query(table).order_by("create_time").first()
+                if tb_info is None:
+                    print("none====" + str(table_name))
+                    continue
+                tb_time = tb_info.create_time.date()
+                today = datetime.now().date()
+                flag = today.__gt__(tb_time)
+                if flag:
+                    table.__dict__.update(info)
+                    tables.append(table)
         session = Session()
         session.add_all(tables)
         session.commit()
