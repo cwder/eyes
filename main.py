@@ -1,8 +1,6 @@
-from fastapi import FastAPI
+from spider.shares_spider import Share
 
-app = FastAPI()
+if __name__ == '__main__':
+    info = Share()
+    info.work()
 
-
-@app.get("/")
-def health():
-    return {"love you": "my eyes"}

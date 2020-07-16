@@ -59,23 +59,20 @@ class Share(BaseSpider):
             table = self.mapping.get(table_name)
             if (table is not None):
                 session = Session()
+                model = BaseSpider.createObj(table_name, info)
                 tb_info = session.query(table).order_by("create_time").first()
                 if tb_info is None:
-                    print("none====" + str(table_name))
+                    model.__dict__.update(info)
+                    tables.append(model)
                     continue
                 tb_time = tb_info.create_time.date()
                 today = datetime.now().date()
                 flag = today.__gt__(tb_time)
                 if flag:
-                    table.__dict__.update(info)
-                    tables.append(table)
+                    model.__dict__.update(info)
+                    tables.append(model)
         session = Session()
         session.add_all(tables)
         session.commit()
 
 
-if __name__ == '__main__':
-    info = Share()
-    info.parseAll()
-    info.invokeCtable()
-    info.insertTable()
