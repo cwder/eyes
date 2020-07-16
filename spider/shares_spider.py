@@ -44,7 +44,7 @@ class Share(BaseSpider):
             table_name = info['f12']
             if (table_name.startswith("6") or table_name.startswith("0")):
                 if (table_name not in inspector.get_table_names()):
-                    BaseSpider.createObj(table_name, info)
+                    BaseSpider.createObjAndModel(table_name, info)
         Base.metadata.create_all(engine)
 
     def insertTable(self):
@@ -59,18 +59,19 @@ class Share(BaseSpider):
             table = self.mapping.get(table_name)
             if (table is not None):
                 session = Session()
-                model = BaseSpider.createObj(table_name, info)
-                tb_info = session.query(table).order_by("create_time").first()
+                obj, model = BaseSpider.createObjAndModel(table_name, info)
+                tb_info = session.query(table).order_by(model.create_time.desc()).first()
                 if tb_info is None:
-                    model.__dict__.update(info)
-                    tables.append(model)
+                    obj.__dict__.update(info)
+                    tables.append(obj)
                     continue
-                tb_time = tb_info.create_time.date()
-                today = datetime.now().date()
-                flag = today.__gt__(tb_time)
+                f2 = tb_info.f2 != str(info['f2'])
+                f3 = tb_info.f3 != str(info['f3'])
+                f4 = tb_info.f4 != str(info['f4'])
+                flag = f2 or f3 or f4
                 if flag:
-                    model.__dict__.update(info)
-                    tables.append(model)
+                    obj.__dict__.update(info)
+                    tables.append(obj)
         session = Session()
         session.add_all(tables)
         session.commit()

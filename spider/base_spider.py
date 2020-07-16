@@ -31,15 +31,16 @@ class BaseSpider:
         pass
 
     @staticmethod
-    def createObj(table_name, info):
+    def createObjAndModel(table_name, info):
         field = dict()
         field["id"] = Column(Integer, autoincrement=True, primary_key=True)
         field["__tablename__"] = table_name
         field["create_time"] = Column(DateTime, default=datetime.now)
         for key in info:
             field[key] = Column(String(50))
-        obj = type(table_name, (Base,), field)()
-        return obj
+        class_table = type(table_name, (Base,), field)
+        obj = class_table()
+        return obj, class_table
 
     def work(self):
         self.parseAll()
