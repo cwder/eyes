@@ -9,6 +9,7 @@ from create_db import Base
 class BaseSpider:
     mapping = dict()
     data_list = []
+    create_models = dict()
     headers = {
         "Accept": "*/*",
         "Accept-Encoding": "gzip, deflate",
