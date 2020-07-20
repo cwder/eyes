@@ -1,5 +1,4 @@
 #!/bin/bash
 
-pip install icalendar smtplib
-cd /root/www/huifu_interview_api/
-nohup gunicorn -c gunicorn.conf -t 60 manage:app
+cd /root/cwd/eyes/
+nohup uvicorn app:app --host '0.0.0.0'--port 9999 --reload

@@ -1,7 +1,7 @@
 eyes:
-  image: mydockerhub.com:5000/dpas_huifu_access_control:v1.0.2
+  image: eyes/v1.0
   ports:
-  - "8302:8302"
+  - "9999:9999"
   volumes:
-  - ../../huifu_interview_api/:/root/www/huifu_interview_api/
-  command: ['bash', '-c', '/root/www/huifu_interview_api/docker/start.sh']
+  - /root/cwd/eyes/:/root/cwd/eyes/
+  command: ['bash', '-c', '/root/cwd/eyes/docker/start.sh']
