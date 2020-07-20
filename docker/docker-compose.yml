@@ -1,5 +1,5 @@
 eyes:
-  image: eyes/v1.0
+  image: eyes/1.0
   ports:
   - "9999:9999"
   volumes:
