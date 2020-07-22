@@ -1,4 +1,4 @@
-FROM python:3.6.8
+FROM python:3.6.7
 MAINTAINER cwd
 #ENV TZ=Asia/Shanghai
 #
