@@ -1,5 +1,4 @@
-FROM python:3.6.8
-
+FROM tiangolo/uvicorn-gunicorn-fastapi:python3.7
 #ENV TZ=Asia/Shanghai
 #
 ## 设置时区
@@ -9,9 +8,9 @@ FROM python:3.6.8
 # 设置requirements，不然会提示找不到requirements.txt
 ADD ["requirements.txt", "."]
 
-#ADD . /code
-#
-#WORKDIR /code
+ADD . /code
+
+WORKDIR /code
 
 RUN pip install -r requirements.txt
 
