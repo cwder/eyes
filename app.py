@@ -9,7 +9,7 @@ app = FastAPI()
 
 @app.get("/")
 def health():
-    return {"love you": "my love eyes"}
+    return {"love you": "my and you eyes"}
 
 
 scheduler.start()
