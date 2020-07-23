@@ -17,4 +17,4 @@ RUN pip install -r requirements.txt
 
 EXPOSE 9999
 
-CMD ["/bin/bash"]
+CMD ["python","app.py"]
