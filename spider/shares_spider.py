@@ -74,3 +74,8 @@ class Share(BaseSpider):
         session = Session()
         session.add_all(tables)
         session.commit()
+
+
+# if __name__ == '__main__':
+#     info = Share()
+#     info.work()
