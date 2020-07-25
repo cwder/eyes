@@ -3,7 +3,7 @@ import time
 from datetime import datetime
 
 import requests
-from sqlalchemy import Column, Integer, String, DateTime, inspect, MetaData, func
+from sqlalchemy import inspect
 
 from create_db import Base, engine, Session
 from spider.base_spider import BaseSpider
@@ -44,7 +44,7 @@ class Share(BaseSpider):
             table_name = info['f12']
             if (table_name.startswith("6") or table_name.startswith("0")):
                 if (table_name not in inspector.get_table_names()):
-                    self.create_models[table_name] = BaseSpider.createObjAndModel(table_name, info)
+                    self.create_models[table_name] = BaseSpider.createObjAndModel(table_name)
         Base.metadata.create_all(engine)
 
     def insertTable(self):
@@ -58,15 +58,15 @@ class Share(BaseSpider):
                 if table_name in self.create_models.keys():
                     obj, model = self.create_models[table_name]
                 else:
-                    obj, model = BaseSpider.createObjAndModel(table_name, info)
+                    obj, model = BaseSpider.createObjAndModel(table_name)
                 tb_info = session.query(model).order_by(model.create_time.desc()).first()
                 if tb_info is None:
                     obj.__dict__.update(info)
                     tables.append(obj)
                     continue
-                f2 = tb_info.f2 != str(info['f2'])
-                f3 = tb_info.f3 != str(info['f3'])
-                f4 = tb_info.f4 != str(info['f4'])
+                f2 = tb_info.f2 != info['f2']
+                f3 = tb_info.f3 != info['f3']
+                f4 = tb_info.f4 != info['f4']
                 flag = f2 or f3 or f4
                 if flag:
                     obj.__dict__.update(info)

@@ -1,7 +1,7 @@
 from datetime import datetime
 
 import requests
-from sqlalchemy import Column, Integer, DateTime, String
+from sqlalchemy import Column, Integer, DateTime, String, Float
 
 from create_db import Base
 
@@ -32,13 +32,42 @@ class BaseSpider:
         pass
 
     @staticmethod
-    def createObjAndModel(table_name, info):
+    def createObjAndModel(table_name):
         field = dict()
         field["id"] = Column(Integer, autoincrement=True, primary_key=True)
         field["__tablename__"] = table_name
         field["create_time"] = Column(DateTime, default=datetime.now)
-        for key in info:
-            field[key] = Column(String(50))
+        field.update({'f1': Column(Integer),
+                          'f2': Column(Float),
+                          'f3': Column(Float),
+                          'f4': Column(Float),
+                          'f5': Column(Integer),
+                          'f6': Column(Float),
+                          'f7': Column(Float),
+                          'f8': Column(Float),
+                          'f9': Column(Float),
+                          'f10': Column(Float),
+                          'f11': Column(Float),
+                          'f12': Column(String(10)),
+                          'f13': Column(Integer),
+                          'f14': Column(String(10)),
+                          'f15': Column(Float),
+                          'f16': Column(Float),
+                          'f17': Column(Float),
+                          'f18': Column(Float),
+                          'f20': Column(Integer),
+                          'f21': Column(Integer),
+                          'f22': Column(Float),
+                          'f23': Column(Float),
+                          'f24': Column(Float),
+                          'f25': Column(Float),
+                          'f62': Column(Float),
+                          'f115': Column(Float),
+                          'f128': Column(String(10)),
+                          'f140': Column(String(10)),
+                          'f141': Column(String(10)),
+                          'f136': Column(String(10)),
+                          'f152': Column(Integer)})
         class_table = type(table_name, (Base,), field)
         obj = class_table()
         return obj, class_table
