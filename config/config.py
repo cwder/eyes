@@ -1,6 +1,6 @@
 import os
 
-from fishbase import conf_as_dict
+from fishbase import conf_as_dict, set_log_file
 from fishbase.fish_object import SingleTon
 
 basedir = os.path.split(os.path.dirname(__file__))[0]
@@ -12,6 +12,12 @@ class EyesConfig(SingleTon):
     dt = {}
 
     def __init__(self):
+        log_path = os.path.join(basedir, 'log')
+        if not os.path.exists(log_path):
+            os.makedirs(log_path)
+        # 日志文件路径
+        log_file = os.path.join(basedir, 'log', project_name + '.log')
+        set_log_file(log_file)
         EyesConfig.get_config_info()
 
     @staticmethod
