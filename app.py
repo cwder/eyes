@@ -3,6 +3,7 @@ from fastapi import FastAPI
 import uvicorn
 from fishbase import logger
 
+from config.config import EyesConfig
 from schedule.daycheduler import scheduler
 
 app = FastAPI()
