@@ -3,6 +3,7 @@ import time
 from datetime import datetime
 
 import requests
+from fishbase import logger
 from sqlalchemy import inspect
 
 from create_db import Base, engine, Session
@@ -16,6 +17,7 @@ class Share(BaseSpider):
         return detail_url
 
     def parseSingleHtml(self, url):
+        logger.info("parseSingleHtml------------")
         response = requests.get(url, timeout=20, headers=self.headers)
         response.encoding = 'utf8'
         self.text = response.text
@@ -39,6 +41,7 @@ class Share(BaseSpider):
             time.sleep(0.5)
 
     def invokeCtable(self):
+        logger.info("invokeCtable------------")
         inspector = inspect(engine)
         for info in self.data_list:
             table_name = info['f12']
@@ -49,7 +52,7 @@ class Share(BaseSpider):
 
     def insertTable(self):
         tables = []
-        print(self.data_list)
+        logger.info(self.data_list)
         inspector = inspect(engine)
         for info in self.data_list:
             table_name = info['f12']

@@ -1,6 +1,7 @@
 from datetime import datetime
 
 import requests
+from fishbase import logger
 from sqlalchemy import Column, Integer, DateTime, String, Float
 
 from create_db import Base
@@ -73,6 +74,7 @@ class BaseSpider:
         return obj, class_table
 
     def work(self):
+        logger.info("work------------")
         self.parseAll()
         self.invokeCtable()
         self.insertTable()
