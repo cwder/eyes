@@ -1,3 +1,5 @@
+import time
+
 from fastapi import FastAPI
 
 import uvicorn
@@ -11,8 +13,8 @@ app = FastAPI()
 
 @app.get("/")
 def health():
-    logger.info("health------------")
-    return {"love you": "my and you eyes"}
+    a = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+    return {"love you": "my and you eyes  " + a}
 
 
 scheduler.start()
