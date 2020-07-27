@@ -17,7 +17,6 @@ class Share(BaseSpider):
         return detail_url
 
     def parseSingleHtml(self, url):
-        logger.info("parseSingleHtml------------")
         response = requests.get(url, timeout=20, headers=self.headers)
         response.encoding = 'utf8'
         self.text = response.text
@@ -41,7 +40,6 @@ class Share(BaseSpider):
             time.sleep(0.5)
 
     def invokeCtable(self):
-        logger.info("invokeCtable------------")
         inspector = inspect(engine)
         for info in self.data_list:
             table_name = info['f12']
@@ -70,6 +68,9 @@ class Share(BaseSpider):
                 f2 = tb_info.f2 != info['f2']
                 f3 = tb_info.f3 != info['f3']
                 f4 = tb_info.f4 != info['f4']
+                if info['f2'] == '-' and info['f3'] == '-' and info['f4'] == '-':
+                    continue
+                # 000015
                 flag = f2 or f3 or f4
                 if flag:
                     obj.__dict__.update(info)
