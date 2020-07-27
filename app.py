@@ -14,7 +14,7 @@ app = FastAPI()
 @app.get("/")
 def health():
     a = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-    return {"love you": "my and you eyes  " + a}
+    return {"love you": "my and you eyes test " + a}
 
 
 scheduler.start()
