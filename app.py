@@ -14,8 +14,12 @@ app = FastAPI()
 
 @app.get("/")
 def health():
-    info = Share()
-    info.work()
+    logger.info("health------------")
+    try:
+        info = Share()
+        info.work()
+    except Exception as ex:
+        logger.info("health--ex---------- " + str(ex))
     a = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
     return {"love you": "my and you eyes test " + a}
 
