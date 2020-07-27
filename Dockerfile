@@ -9,6 +9,8 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
 # 设置requirements，不然会提示找不到requirements.txt
 ADD ["requirements.txt", "."]
 
+VOLUME /code
+
 ADD . /code
 
 WORKDIR /code
