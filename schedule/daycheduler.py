@@ -5,10 +5,9 @@ from spider.shares_spider import Share
 
 
 def job():
-    logger.info("job start------------")
     info = Share()
     info.work()
 
 
 scheduler = BackgroundScheduler()
-scheduler.add_job(job, 'cron', hour=1, minute=59)
+scheduler.add_job(job, 'cron', hour=21, minute=46)
