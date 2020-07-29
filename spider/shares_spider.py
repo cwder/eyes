@@ -40,6 +40,7 @@ class Share(BaseSpider):
             time.sleep(0.5)
 
     def invokeCtable(self):
+        logger.info("invokeCtable---begin-----")
         inspector = inspect(engine)
         for info in self.data_list:
             table_name = info['f12']
@@ -47,18 +48,21 @@ class Share(BaseSpider):
                 if (table_name not in inspector.get_table_names()):
                     self.create_models[table_name] = BaseSpider.createObjAndModel(table_name)
         Base.metadata.create_all(engine)
+        logger.info(str(self.create_models()))
 
     def insertTable(self):
         tables = []
-        logger.info(self.data_list)
         inspector = inspect(engine)
+        logger.info(str(inspector.get_table_names()))
         for info in self.data_list:
             table_name = info['f12']
             if table_name in inspector.get_table_names():
                 session = Session()
                 if table_name in self.create_models.keys():
+                    logger.info("in-------" + table_name)
                     obj, model = self.create_models[table_name]
                 else:
+                    logger.info("not-------" + table_name)
                     obj, model = BaseSpider.createObjAndModel(table_name)
                 tb_info = session.query(model).order_by(model.create_time.desc()).first()
                 if tb_info is None:
