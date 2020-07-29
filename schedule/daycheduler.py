@@ -7,10 +7,9 @@ from spider.shares_spider import Share
 
 def job():
     EyesConfig.initLog()
-    logger.info("job start ============")
     info = Share()
     info.work()
 
 
 scheduler = BackgroundScheduler()
-scheduler.add_job(job, 'cron', hour=22, minute=7)
+scheduler.add_job(job, 'cron', hour=22, minute=30)

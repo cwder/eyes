@@ -68,13 +68,23 @@ class BaseSpider:
                           'f140': Column(String(10)),
                           'f141': Column(String(10)),
                           'f136': Column(String(10)),
-                          'f152': Column(Integer)})
+                          'f152': Column(Integer),
+                          'a1': Column(String(10)),
+                          'a2': Column(String(10)),
+                          'a3': Column(String(10)),
+                          'a4': Column(String(10)),
+                          'a5': Column(String(10)),
+                          'a6': Column(String(10)),
+                          'a7': Column(String(10)),
+                          'a8': Column(String(10)),
+                          'a9': Column(String(10)),
+                          'a10': Column(String(10))
+                      })
         class_table = type(table_name, (Base,), field)
         obj = class_table()
         return obj, class_table
 
     def work(self):
-        logger.info("work------------")
         self.parseAll()
         self.invokeCtable()
         self.insertTable()
