@@ -40,6 +40,7 @@ class Share(BaseSpider):
             time.sleep(0.5)
 
     def invokeCtable(self):
+        logger.info("invokeCtable==========")
         inspector = inspect(engine)
         for info in self.data_list:
             table_name = info['f12']
@@ -47,6 +48,8 @@ class Share(BaseSpider):
                 if (table_name not in inspector.get_table_names()):
                     self.create_models[table_name] = BaseSpider.createObjAndModel(table_name)
         Base.metadata.create_all(engine)
+        logger.info("create_all==========")
+
 
     def insertTable(self):
         tables = []
