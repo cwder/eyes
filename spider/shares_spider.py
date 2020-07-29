@@ -48,12 +48,12 @@ class Share(BaseSpider):
                 if (table_name not in inspector.get_table_names()):
                     self.create_models[table_name] = BaseSpider.createObjAndModel(table_name)
         Base.metadata.create_all(engine)
-        logger.info(str(self.create_models()))
+        logger.info(self.create_models())
 
     def insertTable(self):
         tables = []
         inspector = inspect(engine)
-        logger.info(str(inspector.get_table_names()))
+        logger.info(inspector.get_table_names())
         for info in self.data_list:
             table_name = info['f12']
             if table_name in inspector.get_table_names():
