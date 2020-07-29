@@ -38,6 +38,8 @@ class Share(BaseSpider):
         while self.parseSingleHtml(self.get_detail_url(page)):
             page = page + 1
             time.sleep(0.5)
+            if page > 5:
+                return
 
     def invokeCtable(self):
         inspector = inspect(engine)
