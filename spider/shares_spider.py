@@ -52,16 +52,13 @@ class Share(BaseSpider):
     def insertTable(self):
         tables = []
         inspector = inspect(engine)
-        logger.info(self.create_models.keys())
         for info in self.data_list:
             table_name = info['f12']
             if table_name in inspector.get_table_names():
                 session = Session()
                 if table_name in self.create_models.keys():
-                    logger.info("in-------" + table_name)
                     obj, model = self.create_models[table_name]
                 else:
-                    logger.info("not-------" + table_name)
                     obj, model = BaseSpider.createObjAndModel(table_name)
                 tb_info = session.query(model).order_by(model.create_time.desc()).first()
                 if tb_info is None:
