@@ -38,8 +38,6 @@ class Share(BaseSpider):
         while self.parseSingleHtml(self.get_detail_url(page)):
             page = page + 1
             time.sleep(0.5)
-            if page > 5:
-                return
 
     def invokeCtable(self):
         inspector = inspect(engine)
@@ -53,17 +51,14 @@ class Share(BaseSpider):
     def insertTable(self):
         tables = []
         inspector = inspect(engine)
-        logger.info("a1---------------")
         for info in self.data_list:
             table_name = info['f12']
             if table_name in inspector.get_table_names():
                 session = Session()
                 if table_name in self.create_models.keys():
                     obj, model = self.create_models[table_name]
-                    logger.info("a2--------------- " + table_name)
                 else:
                     obj, model = BaseSpider.createObjAndModel(table_name)
-                    logger.info("a3--------------- " + table_name)
                 tb_info = session.query(model).order_by(model.create_time.desc()).first()
                 if tb_info is None:
                     obj.__dict__.update(info)
@@ -79,13 +74,9 @@ class Share(BaseSpider):
                 if flag:
                     obj.__dict__.update(info)
                     tables.append(obj)
-                    logger.info("a4--------------- ")
-                logger.info("a5--------------- ")
-        logger.info("a6--------------- ")
         session = Session()
         session.add_all(tables)
         session.commit()
-        logger.info("a7--------------- ")
 
 
 # if __name__ == '__main__':
