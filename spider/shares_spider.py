@@ -34,10 +34,13 @@ class Share(BaseSpider):
         return False
 
     def parseAll(self):
+        logger.info("parseAll-------")
         page = 1
         while self.parseSingleHtml(self.get_detail_url(page)):
             page = page + 1
             time.sleep(0.5)
+        logger.info("over-------")
+
 
     def invokeCtable(self):
         inspector = inspect(engine)
@@ -79,6 +82,6 @@ class Share(BaseSpider):
         session.commit()
 
 
-# if __name__ == '__main__':
-#     info = Share()
-#     info.work()
+if __name__ == '__main__':
+    info = Share()
+    info.work()
