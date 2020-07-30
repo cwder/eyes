@@ -41,7 +41,7 @@ class Share(BaseSpider):
         logger.info("parseAll-----")
 
     def invokeCtable(self):
-        logger.info("invokeCtable-----  " + len(self.data_list))
+        logger.info("invokeCtable-----  " + str(len(self.data_list)))
         inspector = inspect(engine)
         for info in self.data_list:
             time.sleep(0.5)
