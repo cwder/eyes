@@ -86,5 +86,5 @@ class BaseSpider:
 
     def work(self):
         self.parseAll()
-        # self.invokeCtable()
+        self.invokeCtable()
         # self.insertTable()
