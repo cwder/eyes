@@ -38,6 +38,7 @@ class Share(BaseSpider):
         page = 1
         while self.parseSingleHtml(self.get_detail_url(page)):
             page = page + 1
+            logger.info("page------- " + page)
             time.sleep(0.5)
         logger.info("over-------")
 
