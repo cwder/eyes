@@ -38,23 +38,18 @@ class Share(BaseSpider):
         while self.parseSingleHtml(self.get_detail_url(page)):
             page = page + 1
             time.sleep(0.5)
-        logger.info("parseAll-----")
 
     def invokeCtable(self):
-        logger.info("invokeCtable-----  " + str(len(self.data_list)))
+        logger.info("1-----")
         inspector = inspect(engine)
-        logger.info("1-----  ")
         for info in self.data_list:
-            logger.info("2-----  ")
-            time.sleep(0.5)
-            logger.info("3-----  ")
+            logger.info("2-----")
             table_name = info['f12']
-            logger.info("4-----  ")
             if (table_name.startswith("6") or table_name.startswith("0")):
                 if (table_name not in inspector.get_table_names()):
                     self.create_models[table_name] = BaseSpider.createObjAndModel(table_name)
-        logger.info("over-----")
-        Base.metadata.create_all(engine)
+                    Base.metadata.create_all(engine)
+        logger.info("3-----")
 
     def insertTable(self):
         tables = []
