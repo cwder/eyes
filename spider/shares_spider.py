@@ -41,14 +41,18 @@ class Share(BaseSpider):
 
     def invokeCtable(self):
         logger.info("1-----")
+        page = 1
         inspector = inspect(engine)
         for info in self.data_list:
+            page = page + 1
             logger.info("2-----")
             table_name = info['f12']
             if (table_name.startswith("6") or table_name.startswith("0")):
                 if (table_name not in inspector.get_table_names()):
                     self.create_models[table_name] = BaseSpider.createObjAndModel(table_name)
-                    Base.metadata.create_all(engine)
+            if page % 10 == 0:
+                Base.metadata.create_all(engine)
+        Base.metadata.create_all(engine)
         logger.info("3-----")
 
     def insertTable(self):
