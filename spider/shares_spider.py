@@ -33,37 +33,27 @@ class Share(BaseSpider):
             return True
         return False
 
-    def parseAll(self):
-        page = 1
-        while self.parseSingleHtml(self.get_detail_url(page)):
-            page = page + 1
-            time.sleep(0.5)
-
-    def invokeCtable(self):
-        logger.info("1-----")
-        page = 1
+    def parseTask(self, page):
         inspector = inspect(engine)
-        for info in self.data_list:
-            page = page + 1
-            logger.info("2-----")
-            table_name = info['f12']
-            if (table_name.startswith("6") or table_name.startswith("0")):
-                if (table_name not in inspector.get_table_names()):
-                    self.create_models[table_name] = BaseSpider.createObjAndModel(table_name)
-            if page % 10 == 0:
-                Base.metadata.create_all(engine)
-        Base.metadata.create_all(engine)
-        logger.info("3-----")
-
-    def insertTable(self):
         tables = []
-        inspector = inspect(engine)
-        for info in self.data_list:
-            table_name = info['f12']
-            if table_name in inspector.get_table_names():
+        data_list = self.parseSingleHtml(self.get_detail_url(page))
+        if data_list:
+            create_models = dict()
+            for info in data_list[::-1]:
+                table_name = info['f12']
+                if (table_name.startswith("6") or table_name.startswith("0")):
+                    if (table_name not in inspector.get_table_names()):
+                        create_models[table_name] = BaseSpider.createObjAndModel(table_name)
+                else:
+                    data_list.remove(info)
+            if create_models:
+                Base.metadata.create_all(engine)
+            for info in data_list:
+                table_name = info['f12']
+                # if table_name in inspector.get_table_names():
                 session = Session()
-                if table_name in self.create_models.keys():
-                    obj, model = self.create_models[table_name]
+                if table_name in create_models.keys():
+                    obj, model = create_models[table_name]
                 else:
                     obj, model = BaseSpider.createObjAndModel(table_name)
                 tb_info = session.query(model).order_by(model.create_time.desc()).first()
@@ -76,16 +66,108 @@ class Share(BaseSpider):
                 f4 = tb_info.f4 != info['f4']
                 if info['f2'] == '-' and info['f3'] == '-' and info['f4'] == '-':
                     continue
-                # 000015
                 flag = f2 or f3 or f4
                 if flag:
                     obj.__dict__.update(info)
                     tables.append(obj)
-        session = Session()
-        session.add_all(tables)
-        session.commit()
+            session = Session()
+            session.add_all(tables)
+            session.commit()
+            return True
+        else:
+            return False
+
+    def parseAction(self):
+        page = 1
+        while self.parseTask(page):
+            page = page + 1
+            time.sleep(0.5)
+
+    def parseAll(self):
+        page = 1
+        while self.parseSingleHtml(self.get_detail_url(page)):
+            page = page + 1
+            time.sleep(0.5)
+
+
+
+    def invokeCtable(self):
+        inspector = inspect(engine)
+        names = inspector.get_table_names()
+        for info in self.data_list[::-1]:
+            table_name = info['f12']
+            if (table_name.startswith("6") or table_name.startswith("0")):
+                if (table_name not in names):
+                    self.create_models[table_name] = BaseSpider.createObjAndModel(table_name)
+                    Base.metadata.create_all(engine)
+            else:
+                self.data_list.remove(info)
+
+    def cTable(self):
+        inspector = inspect(engine)
+        names = inspector.get_table_names()
+        for info in self.data_list:
+            table_name = info['f12']
+            if (table_name.startswith("6") or table_name.startswith("0")):
+                session = Session()
+                obj, model = BaseSpider.createObjAndModel(table_name)
+                if (table_name not in names):
+                    Base.metadata.create_all(engine)
+                tb_info = session.query(model).order_by(model.create_time.desc()).first()
+                if tb_info is None:
+                    obj.__dict__.update(info)
+                    # tables.append(obj)
+                    session = Session()
+                    session.add(obj)
+                    session.commit()
+                    continue
+                f2 = tb_info.f2 != info['f2']
+                f3 = tb_info.f3 != info['f3']
+                f4 = tb_info.f4 != info['f4']
+                if info['f2'] == '-' and info['f3'] == '-' and info['f4'] == '-':
+                    continue
+                # 000015
+                flag = f2 or f3 or f4
+                if flag:
+                    obj.__dict__.update(info)
+                    # tables.append(obj)
+                    session = Session()
+                    session.add(obj)
+                    session.commit()
+
+
+    def insertTable(self):
+        # tables = []
+        for info in self.data_list:
+            table_name = info['f12']
+            # if table_name in inspector.get_table_names():
+            session = Session()
+            if table_name in self.create_models.keys():
+                obj, model = self.create_models[table_name]
+            else:
+                obj, model = BaseSpider.createObjAndModel(table_name)
+            tb_info = session.query(model).order_by(model.create_time.desc()).first()
+            if tb_info is None:
+                obj.__dict__.update(info)
+                # tables.append(obj)
+                session.add(obj)
+                session.commit()
+                continue
+            f2 = tb_info.f2 != info['f2']
+            f3 = tb_info.f3 != info['f3']
+            f4 = tb_info.f4 != info['f4']
+            if info['f2'] == '-' and info['f3'] == '-' and info['f4'] == '-':
+                continue
+            # 000015
+            flag = f2 or f3 or f4
+            if flag:
+                obj.__dict__.update(info)
+                # tables.append(obj)
+                session.add(obj)
+                session.commit()
 
 
 if __name__ == '__main__':
     info = Share()
-    info.work()
+    info.parseAll()
+    info.cTable()
