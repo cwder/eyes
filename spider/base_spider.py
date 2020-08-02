@@ -26,10 +26,7 @@ class BaseSpider:
     def parseAll(self):
         pass
 
-    def invokeCtable(self):
-        pass
-
-    def insertTable(self):
+    def processTable(self):
         pass
 
     @staticmethod
@@ -86,5 +83,4 @@ class BaseSpider:
 
     def work(self):
         self.parseAll()
-        self.invokeCtable()
-        self.insertTable()
+        self.processTable()
