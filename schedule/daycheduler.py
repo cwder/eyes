@@ -13,4 +13,4 @@ def job():
 
 
 scheduler = BackgroundScheduler()
-scheduler.add_job(job, 'cron', hour=0, minute=0)
+scheduler.add_job(job, 'cron', hour=0, minute=3)
