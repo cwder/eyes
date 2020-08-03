@@ -49,7 +49,6 @@ class OldShare(BaseSpider):
         Base.metadata.create_all(engine)
 
     def insertTable(self):
-        tables = []
         inspector = inspect(engine)
         for info in self.data_list:
             table_name = info['f12']
@@ -62,7 +61,8 @@ class OldShare(BaseSpider):
                 tb_info = session.query(model).order_by(model.create_time.desc()).first()
                 if tb_info is None:
                     obj.__dict__.update(info)
-                    tables.append(obj)
+                    session.add(obj)
+                    session.commit()
                     continue
                 f2 = tb_info.f2 != info['f2']
                 f3 = tb_info.f3 != info['f3']
@@ -73,12 +73,15 @@ class OldShare(BaseSpider):
                 flag = f2 or f3 or f4
                 if flag:
                     obj.__dict__.update(info)
-                    tables.append(obj)
-        session = Session()
-        session.add_all(tables)
-        session.commit()
+                    session.add(obj)
+                    session.commit()
+
+    def work(self):
+        self.parseAll()
+        self.invokeCtable()
+        self.insertTable()
 
 
-# if __name__ == '__main__':
-#     info = Share()
-#     info.work()
+if __name__ == '__main__':
+    info = OldShare()
+    info.work()
