@@ -42,6 +42,7 @@ class Share(BaseSpider):
         names = inspector.get_table_names()
         for info in self.data_list:
             table_name = info['f12']
+            time.sleep(0.5)
             if (table_name.startswith("6") or table_name.startswith("0")):
                 session = Session()
                 obj, model = BaseSpider.createObjAndModel(table_name)
