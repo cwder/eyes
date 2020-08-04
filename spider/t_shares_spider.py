@@ -40,6 +40,7 @@ class OldAShare(BaseSpider):
             time.sleep(0.5)
 
     def invokeCtable(self):
+        logger.info("invokeCtable-------")
         inspector = inspect(engine)
         for info in self.data_list:
             table_name = info['f12']
