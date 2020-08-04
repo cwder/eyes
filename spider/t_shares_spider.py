@@ -52,10 +52,10 @@ class OldAShare(BaseSpider):
     def insertTable(self):
         tables = []
         inspector = inspect(engine)
+        session = Session()
         for info in self.data_list:
             table_name = info['f12']
             if table_name in inspector.get_table_names():
-                session = Session()
                 if table_name in self.create_models.keys():
                     obj, model = self.create_models[table_name]
                 else:
@@ -76,11 +76,9 @@ class OldAShare(BaseSpider):
                     obj.__dict__.update(info)
                     tables.append(obj)
             if len(tables) > 100:
-                session = Session()
                 session.add_all(tables)
                 session.commit()
                 tables.clear()
-        session = Session()
         session.add_all(tables)
         session.commit()
 
