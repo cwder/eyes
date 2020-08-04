@@ -81,7 +81,7 @@ class OldShare(BaseSpider):
     def work(self):
         self.parseAll()
         self.invokeCtable()
-        self.insertTable()
+        # self.insertTable()
 
 
 if __name__ == '__main__':
