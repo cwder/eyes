@@ -75,6 +75,11 @@ class OldAShare(BaseSpider):
                 if flag:
                     obj.__dict__.update(info)
                     tables.append(obj)
+            if len(tables) > 100:
+                session = Session()
+                session.add_all(tables)
+                session.commit()
+                tables.clear()
         session = Session()
         session.add_all(tables)
         session.commit()
