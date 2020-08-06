@@ -3,11 +3,8 @@ import time
 from fastapi import FastAPI
 
 import uvicorn
-from fishbase import logger
 
-from config.config import EyesConfig
 from schedule.daycheduler import scheduler
-from spider.shares_spider import Share
 
 app = FastAPI()
 

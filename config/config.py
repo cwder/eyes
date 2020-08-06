@@ -31,6 +31,6 @@ class EyesConfig(SingleTon):
 
 eyes_conf = EyesConfig()
 db_info = {
-    "uri": eyes_conf.dt['testing']['sqlalchemy_database_uri']
+    "uri": eyes_conf.dt['product']['sqlalchemy_database_uri']
 }
 

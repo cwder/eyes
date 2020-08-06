@@ -1,17 +1,14 @@
 from apscheduler.schedulers.background import BackgroundScheduler
-from fishbase import logger
 
 from config.config import EyesConfig
-from spider.old_shares_spider import OldShare
-from spider.shares_spider import Share
-from spider.t_shares_spider import OldAShare
+from spider.final_spider import EyesShare
 
 
 def job():
     EyesConfig.initLog()
-    info = OldAShare()
-    info.test()
+    info = EyesShare()
+    info.run()
 
 
 scheduler = BackgroundScheduler()
-scheduler.add_job(job, 'cron', hour=23, minute=46)
+scheduler.add_job(job, 'cron', hour=22, minute=46)
