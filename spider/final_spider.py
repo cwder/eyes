@@ -32,7 +32,7 @@ class EyesShare(BaseSpider):
 
     def task(self, data_list, tableNames):
         create_models = dict()
-        for info in data_list[::-1]:
+        for info in data_list[:]:
             table_name = info['f12']
             if (table_name.startswith("6") or table_name.startswith("0")):
                 if (table_name not in tableNames):
