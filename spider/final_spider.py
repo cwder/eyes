@@ -27,14 +27,12 @@ class EyesShare(BaseSpider):
                 # data_list [{'f1': 2, 'f2': 252.61, 'f3': 468.05, 'f4': 208.14,
                 return data_list
             except Exception as e:
-                return False
-            return True
-        return False
+                return None
+            return None
+        return None
 
     def task(self, data_list, tableNames):
         create_models = dict()
-        logger.info("a------------------------------")
-        logger.info(data_list)
         for info in data_list[:]:
             table_name = info['f12']
             if (table_name.startswith("6") or table_name.startswith("0")):
@@ -83,7 +81,6 @@ class EyesShare(BaseSpider):
 
 
 if __name__ == '__main__':
-    # info = EyesShare()
-#     # info.run()
-    for a in True[:]:
-        print("1")
+    info = EyesShare()
+    info.run()
+
