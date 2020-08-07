@@ -1,6 +1,7 @@
 import re
 
 import requests
+from fishbase import logger
 from sqlalchemy import inspect
 
 from create_db import Base, engine, Session
@@ -32,6 +33,8 @@ class EyesShare(BaseSpider):
 
     def task(self, data_list, tableNames):
         create_models = dict()
+        logger.info("a------------------------------")
+        logger.info(data_list)
         for info in data_list[:]:
             table_name = info['f12']
             if (table_name.startswith("6") or table_name.startswith("0")):
@@ -80,5 +83,7 @@ class EyesShare(BaseSpider):
 
 
 if __name__ == '__main__':
-    info = EyesShare()
-    info.run()
+    # info = EyesShare()
+#     # info.run()
+    for a in True[:]:
+        print("1")
