@@ -32,12 +32,11 @@ class EyesShare(BaseSpider):
         return None
 
     def task(self, data_list, tableNames):
-        create_models = dict()
         for info in data_list[:]:
             table_name = info['f12']
             if (table_name.startswith("6") or table_name.startswith("0")):
                 if (table_name not in tableNames):
-                    create_models[table_name] = BaseSpider.createObjAndModel(table_name)
+                    self.create_models[table_name] = BaseSpider.createObjAndModel(table_name)
             else:
                 data_list.remove(info)
         Base.metadata.create_all(engine)
@@ -45,10 +44,9 @@ class EyesShare(BaseSpider):
         session = Session()
         for info in data_list:
             table_name = info['f12']
-            if table_name in create_models.keys():
-                obj, model = create_models[table_name]
-            else:
-                obj, model = BaseSpider.createObjAndModel(table_name)
+            if table_name not in self.create_models.keys():
+                self.create_models[table_name] = BaseSpider.createObjAndModel(table_name)
+            obj, model = self.create_models[table_name]
             tb_info = session.query(model).order_by(model.create_time.desc()).first()
             if tb_info is None:
                 obj.__dict__.update(info)
