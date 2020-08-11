@@ -64,6 +64,7 @@ class EyesShare(BaseSpider):
                 tables.append(obj)
         session.add_all(tables)
         session.commit()
+        logger.info("task-----------")
 
     def run(self):
         page = 1
@@ -72,13 +73,15 @@ class EyesShare(BaseSpider):
         while True:
             data_list = self.parseSingleHtml(self.get_detail_url(page))
             if data_list is None:
+                logger.info("run---over-------- ")
                 break
             else:
                 self.task(data_list, tables)
                 page = page + 1
+                logger.info("run----------- " + str(page))
+        logger.info("run---Allover-------- ")
 
 
 if __name__ == '__main__':
     info = EyesShare()
     info.run()
-
