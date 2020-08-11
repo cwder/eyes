@@ -8,7 +8,8 @@ def job():
     EyesConfig.initLog()
     info = EyesShare()
     info.run()
+    info.run()
 
 
 scheduler = BackgroundScheduler()
-scheduler.add_job(job, 'cron', hour=22, minute=30)
+scheduler.add_job(job, 'cron', hour=23, minute=40)
