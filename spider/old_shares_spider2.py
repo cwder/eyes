@@ -41,12 +41,10 @@ class OldShare2(BaseSpider):
 
     def invokeCtable(self):
         inspector = inspect(engine)
-        table_names = inspector.get_table_names()
-        logger.info(table_names)
         for info in self.data_list:
             table_name = info['f12']
             if (table_name.startswith("6") or table_name.startswith("0")):
-                if (table_name not in table_names):
+                if (table_name not in inspector.get_table_names()):
                     self.create_models[table_name] = BaseSpider.createObjAndModel(table_name)
         Base.metadata.create_all(engine)
 
@@ -66,16 +64,16 @@ class OldShare2(BaseSpider):
                     obj.__dict__.update(info)
                     tables.append(obj)
                     continue
-                # f2 = tb_info.f2 != info['f2']
-                # f3 = tb_info.f3 != info['f3']
-                # f4 = tb_info.f4 != info['f4']
-                # if info['f2'] == '-' and info['f3'] == '-' and info['f4'] == '-':
-                #     continue
-                # # 000015
-                # flag = f2 or f3 or f4
-                # if flag:
-                obj.__dict__.update(info)
-                tables.append(obj)
+                f2 = tb_info.f2 != info['f2']
+                f3 = tb_info.f3 != info['f3']
+                f4 = tb_info.f4 != info['f4']
+                if info['f2'] == '-' and info['f3'] == '-' and info['f4'] == '-':
+                    continue
+                # 000015
+                flag = f2 or f3 or f4
+                if flag:
+                    obj.__dict__.update(info)
+                    tables.append(obj)
         session = Session()
         session.add_all(tables)
         session.commit()
