@@ -66,16 +66,16 @@ class OldShare2(BaseSpider):
                     obj.__dict__.update(info)
                     tables.append(obj)
                     continue
-                f2 = tb_info.f2 != info['f2']
-                f3 = tb_info.f3 != info['f3']
-                f4 = tb_info.f4 != info['f4']
-                if info['f2'] == '-' and info['f3'] == '-' and info['f4'] == '-':
-                    continue
-                # 000015
-                flag = f2 or f3 or f4
-                if flag:
-                    obj.__dict__.update(info)
-                    tables.append(obj)
+                # f2 = tb_info.f2 != info['f2']
+                # f3 = tb_info.f3 != info['f3']
+                # f4 = tb_info.f4 != info['f4']
+                # if info['f2'] == '-' and info['f3'] == '-' and info['f4'] == '-':
+                #     continue
+                # # 000015
+                # flag = f2 or f3 or f4
+                # if flag:
+                obj.__dict__.update(info)
+                tables.append(obj)
         session = Session()
         session.add_all(tables)
         session.commit()
