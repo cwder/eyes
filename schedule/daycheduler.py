@@ -9,8 +9,8 @@ from spider.old_shares_spider2 import OldShare2
 def job():
     EyesConfig.initLog()
     info = EyesShare()
-    info.work()
+    info.run()
 
 
 scheduler = BackgroundScheduler()
-scheduler.add_job(job, 'cron', hour=23, minute=30)
+scheduler.add_job(job, 'cron', hour=23, minute=36)
