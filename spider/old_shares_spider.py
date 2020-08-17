@@ -37,7 +37,7 @@ class OldShare(BaseSpider):
         page = 1
         while self.parseSingleHtml(self.get_detail_url(page)):
             page = page + 1
-            time.sleep(0.5)
+            # time.sleep(0.5)
 
     def invokeCtable(self):
         inspector = inspect(engine)
