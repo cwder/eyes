@@ -97,11 +97,26 @@ class Cwd:
         #     # 使用 :key 做占位符
         #     text('select * from :c where id < 3 '),
         #     {'c': 'abc'})  # 用 dict 传参数，更易读
-        dd = 'xxxx'
-        sql = "create table {} (id int primary key auto_increment,f1 float," \
-              "f2 float,f3 varchar(20),f4 datetime NOT NULL DEFAULT NOW())" \
-            .format(dd)
+        # dd = 'xxxx'
+        # sql = "create table {} (id int primary key auto_increment,f1 float," \
+        #       "f2 float,f3 varchar(20),f4 datetime NOT NULL DEFAULT NOW())" \
+        #     .format(dd)
+        table_name = "688521"
+        s1 = '`'
+        tName = "{}{}{}".format(s1, table_name, s1)
+        sql = "INSERT INTO {} (f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13,f14,f15,f16,f17,f18,f20,f21,f22,f23,f24,f25,f62,f115,f128,f140,f141,f136,f152) " \
+              "VALUES ({:f},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}) " \
+            .format(tName, 11, 'f2', 'f3', 'f4', 'f5',
+                    'f6', 'f7',
+                    'f8', 'f9', 'f10', 'f11', 'f12', 'f13',
+                    'f14', 'f15'
+                    , 'f16', 'f17', 'f18', 'f20', 'f21',
+                    'f22', 'f23', 'f24'
+                    , 'f25', 'f62', 'f115', 'f128', 'f140',
+                    'f141', 'f136', 'f152'
+                    )
         session.execute(sql)
+        # Session.remove()
 
     def makeSql(self):
         allTables = []
@@ -114,10 +129,25 @@ class Cwd:
                 allTables.append(rowproxy[key])
                 print(rowproxy[key])
         for info in self.data_list:
-            table_name = info['f12']
+            table_name = info.get('f12')  # info['f12']
             if (table_name.startswith("6") or table_name.startswith("0")):
                 if (table_name not in allTables):
                     Cwd.createTable(table_name)
+            s1 = '`'
+            tName = "{}{}{}".format(s1, table_name, s1)
+            sql = "INSERT INTO {} (f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13,f14,f15,f16,f17,f18,f20,f21,f22,f23,f24,f25,f62,f115,f128,f140,f141,f136,f152) " \
+                  "VALUE ({},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}) " \
+                .format(tName, info.get('f1'), info.get('f2'), info.get('f3'), info.get('f4'), info.get('f5'),
+                        info.get('f6'), info.get('f7'),
+                        info.get('f8'), info.get('f9'), info.get('f10'), info.get('f11'), info.get('f12'),
+                        info.get('f13'), info.get('f14'), info.get('f15')
+                        , info.get('f16'), info.get('f17'), info.get('f18'), info.get('f20'), info.get('f21'),
+                        info.get('f22'), info.get('f23'), info.get('f24')
+                        , info.get('f25'), info.get('f62'), info.get('f115'), info.get('f128'), info.get('f140'),
+                        info.get('f141'), info.get('f136'), info.get('f152')
+                        )
+            session.execute(sql)
+        Session.remove()
         # for rowproxy in b:
         #     print(rowproxy.items())
         #     print(rowproxy.keys())
@@ -136,8 +166,12 @@ class Cwd:
 
 
 if __name__ == '__main__':
+    # session = Session()
+    # sql = "INSERT INTO {} (f1,f2) VALUE ({},{}) ".format("`000001`", "1", "2")
+    # session.execute(sql)
     a = Cwd()
-    a.parseAll()
-    a.makeSql()
+    # a.parseAll()
+    # a.makeSql()
+    a.test()
     # a.createTable("35543") "`32443`"
     # a.a('fff')
