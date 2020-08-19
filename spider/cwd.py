@@ -1,19 +1,10 @@
 import re
-import time
-from datetime import datetime
 
 import requests
-from fishbase import logger
-from sqlalchemy import inspect, text
-from sqlalchemy.engine import ResultProxy, RowProxy
 
 from create_db import Base, engine, Session
 
 
-# engine.execute('CREATE TABLE "EX1" ('
-#                'id INTEGER NOT NULL,'
-#                'name VARCHAR, '
-#                'PRIMARY KEY (id));')
 class Cwd:
 
     def __init__(self):
@@ -83,42 +74,6 @@ class Cwd:
         while self.parseSingleHtml(self.get_detail_url(page)):
             page = page + 1
 
-    def test(self):
-        values = ('ccc1')
-        session = Session()
-        s = text("create table '\:cc' (id INT)")
-        # s1 = text("select * from abc where id between :x and :y")
-        # session.execute(s1, x='A', y='L').fetchall()
-        # session.execute(s, cc='t1yu')
-        # aaa = 'kiss'
-        # sql = "create table {} (id INT)".format(aaa)
-        # session.execute(sql)
-        # session.execute("create table (%(ccc) (id INT)", ccc='youwu')
-        # result = session.execute(
-        #     # 使用 :key 做占位符
-        #     text('select * from :c where id < 3 '),
-        #     {'c': 'abc'})  # 用 dict 传参数，更易读
-        # dd = 'xxxx'
-        # sql = "create table {} (id int primary key auto_increment,f1 float," \
-        #       "f2 float,f3 varchar(20),f4 datetime NOT NULL DEFAULT NOW())" \
-        #     .format(dd)
-        table_name = "688521"
-        s1 = '`'
-        tName = "{}{}{}".format(s1, table_name, s1)
-        sql = "INSERT INTO {} (f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13,f14,f15,f16,f17,f18,f20,f21,f22,f23,f24,f25,f62,f115,f128,f140,f141,f136,f152) " \
-              "VALUES ({:f},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}) " \
-            .format(tName, 11, 'f2', 'f3', 'f4', 'f5',
-                    'f6', 'f7',
-                    'f8', 'f9', 'f10', 'f11', 'f12', 'f13',
-                    'f14', 'f15'
-                    , 'f16', 'f17', 'f18', 'f20', 'f21',
-                    'f22', 'f23', 'f24'
-                    , 'f25', 'f62', 'f115', 'f128', 'f140',
-                    'f141', 'f136', 'f152'
-                    )
-        session.execute(sql)
-        # Session.remove()
-
     def makeSql(self):
         allTables = []
         session = Session()
@@ -153,40 +108,13 @@ class Cwd:
                 session.execute(sql)
                 session.commit()
         Session.remove()
-        # for rowproxy in b:
-        #     print(rowproxy.items())
-        #     print(rowproxy.keys())
-        #     print(rowproxy.iterkeys())
-        #     print(rowproxy.itervalues())
-        #     print(rowproxy.values())
-        #     break
-        # aa = b.fetchall()
-        # print(aa)
-        # for rowproxy in b:
-        #     print(rowproxy)
-        #     for column, value in rowproxy.items():
-        #         print(column)
-        #         if value == 'ccc':
-        #             print('ok')
+
+    def run(self):
+        self.parseAll()
+        self.makeSql()
 
 
 if __name__ == '__main__':
-    # session = Session()
-    # table_name = "688521"
-    # s1 = '`'
-    # tName = "{}{}{}".format(s1, table_name, s1)
-    # sql = "INSERT INTO {} (f1,f2) " \
-    #       "VALUES ({},{}) " \
-    #     .format(tName, 11, 23)
-    # # sql = "INSERT INTO `688521` (f1,f2) VALUES (11,22) "
-    # session.execute(sql)
-    # session.commit()
-    # session = Session()
-    # sql = "INSERT INTO {} (f1,f2) VALUE ({},{}) ".format("`000001`", "1", "2")
-    # session.execute(sql)
     a = Cwd()
     a.parseAll()
     a.makeSql()
-    # a.test()
-    # a.createTable("35543") "`32443`"
-    # a.a('fff')
