@@ -11,10 +11,7 @@ engine = create_engine(
     pool_pre_ping=True,
     pool_recycle=3600
 )
-session_factory = sessionmaker(bind=engine,autocommit=True)
+session_factory = sessionmaker(bind=engine)
 Session = scoped_session(session_factory)
 # 基本类
 Base = declarative_base()
-
-
-
