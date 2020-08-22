@@ -42,7 +42,7 @@ class Cwd:
               "f2 float,f3 varchar(20),f4 float," \
               "f5 int,f6 float,f7 float,f8 float,f9 float,f10 float,f11 float," \
               "f12 varchar(10),f13 int,f14 varchar(10),f15 float,f16 float," \
-              "f17 float,f18 float,f20 int,f21 int,f22 float,f23 float,f24 float," \
+              "f17 float,f18 float,f20 bigint,f21 bigint,f22 float,f23 float,f24 float," \
               "f25 float,f62 float,f115 float,f128 varchar(10),f140 varchar(10)," \
               "f141 varchar(10),f136 varchar(10),f152 varchar(10),a1 varchar(10)," \
               "a2 varchar(10),a3 varchar(10),a4 varchar(10),a5 varchar(10)," \
