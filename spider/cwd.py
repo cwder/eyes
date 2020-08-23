@@ -28,10 +28,6 @@ class Cwd:
         detail_url = "http://55.push2.eastmoney.com/api/qt/clist/get?cb=jQuery112407838904080399163_1593699026973&pn=%d&pz=20&po=1&np=1&ut=bd1d9ddb04089700cf9c27f6f7426281&fltt=2&invt=2&fid=f3&fs=m:0+t:6,m:0+t:13,m:0+t:80,m:1+t:2,m:1+t:23&fields=f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f12,f13,f14,f15,f16,f17,f18,f20,f21,f23,f24,f25,f22,f11,f62,f128,f136,f115,f152&_=1593699027081" % page
         return detail_url
 
-    def a(self, tableName):
-        s1 = '`'
-        tableName = "{}{}{}".format(s1, tableName, s1)
-        print(tableName)
 
     @staticmethod
     def createTable(tableName):
@@ -41,7 +37,7 @@ class Cwd:
         sql = "create table {} (id int primary key auto_increment,create_time datetime NOT NULL DEFAULT NOW(),f1 float," \
               "f2 float,f3 varchar(20),f4 float," \
               "f5 int,f6 float,f7 float,f8 float,f9 float,f10 float,f11 float," \
-              "f12 varchar(10),f13 int,f14 varchar(10),f15 float,f16 float," \
+              "f12 varchar(10),f13 bigint,f14 varchar(10),f15 float,f16 float," \
               "f17 float,f18 float,f20 bigint,f21 bigint,f22 float,f23 float,f24 float," \
               "f25 float,f62 float,f115 float,f128 varchar(10),f140 varchar(10)," \
               "f141 varchar(10),f136 varchar(10),f152 varchar(10),a1 varchar(10)," \
