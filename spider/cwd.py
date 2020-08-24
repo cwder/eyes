@@ -28,14 +28,13 @@ class Cwd:
         detail_url = "http://55.push2.eastmoney.com/api/qt/clist/get?cb=jQuery112407838904080399163_1593699026973&pn=%d&pz=20&po=1&np=1&ut=bd1d9ddb04089700cf9c27f6f7426281&fltt=2&invt=2&fid=f3&fs=m:0+t:6,m:0+t:13,m:0+t:80,m:1+t:2,m:1+t:23&fields=f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f12,f13,f14,f15,f16,f17,f18,f20,f21,f23,f24,f25,f22,f11,f62,f128,f136,f115,f152&_=1593699027081" % page
         return detail_url
 
-
     @staticmethod
     def createTable(tableName):
         s1 = '`'
         tName = "{}{}{}".format(s1, tableName, s1)
         session = Session()
         sql = "create table {} (id int primary key auto_increment,create_time datetime NOT NULL DEFAULT NOW(),f1 float," \
-              "f2 float,f3 varchar(20),f4 float," \
+              "f2 float,f3 float,f4 float," \
               "f5 int,f6 float,f7 float,f8 float,f9 float,f10 float,f11 float," \
               "f12 varchar(10),f13 bigint,f14 varchar(10),f15 float,f16 float," \
               "f17 float,f18 float,f20 bigint,f21 bigint,f22 float,f23 float,f24 float," \
@@ -80,11 +79,29 @@ class Cwd:
                 print(key)
                 allTables.append(rowproxy[key])
                 print(rowproxy[key])
+        tablesResultProxy.close()
         for info in self.data_list:
             table_name = info.get('f12')  # info['f12']
             if (table_name.startswith("6") or table_name.startswith("0")):
                 if (table_name not in allTables):
                     Cwd.createTable(table_name)
+                s1 = '`'
+                tName = "{}{}{}".format(s1, table_name, s1)
+                sql = "select * from {} order by {} desc".format(tName, 'create_time')
+                tablesResultProxy = session.execute(sql)
+                rowcount = len(tablesResultProxy._saved_cursor._result.rows)
+                if rowcount > 0:
+                    rowproxy = tablesResultProxy.first()
+                    if info['f2'] == '0' and info['f3'] == '0' and info['f4'] == '0':
+                        continue
+                    if info['f2'] == 0 and info['f3'] == 0 and info['f4'] == 0:
+                        continue
+                    f2 = rowproxy['f2'] != info['f2']
+                    f3 = rowproxy['f3'] != info['f3']
+                    f4 = rowproxy['f4'] != info['f4']
+                    flag = f2 or f3 or f4
+                    if flag is False:
+                        continue
                 s1 = '`'
                 s2 = '\''
                 tName = "{}{}{}".format(s1, table_name, s1)
@@ -105,6 +122,7 @@ class Cwd:
                 session.commit()
         Session.remove()
 
+
     def run(self):
         self.parseAll()
         self.makeSql()
@@ -112,5 +130,20 @@ class Cwd:
 
 if __name__ == '__main__':
     a = Cwd()
-    a.parseAll()
-    a.makeSql()
+    a.run()
+    # session = Session()
+    # sql = "select * from {} order by {} desc".format('`000001`', 'create_time')
+    # tablesResultProxy = session.execute(sql)
+    # rowcount = len(tablesResultProxy._saved_cursor._result.rows)
+    # # tableKeys = tablesResultProxy.keys()
+    # a = tablesResultProxy.first()
+    # print(a['f1'])
+    # print(a['f2'])
+    # print(a['f3'])
+    # print(a['f4'])
+    # print(a['f5'])
+    # for rowproxy in tablesResultProxy:
+    #     pass
+    # a = Cwd()
+    # a.parseAll()
+    # a.makeSql()
