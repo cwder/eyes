@@ -90,18 +90,18 @@ class Cwd:
                 sql = "select * from {} order by {} desc".format(tName, 'create_time')
                 tablesResultProxy = session.execute(sql)
                 rowcount = len(tablesResultProxy._saved_cursor._result.rows)
-                if rowcount > 0:
-                    rowproxy = tablesResultProxy.first()
-                    if info['f2'] == '0' and info['f3'] == '0' and info['f4'] == '0':
-                        continue
-                    if info['f2'] == 0 and info['f3'] == 0 and info['f4'] == 0:
-                        continue
-                    f2 = rowproxy['f2'] != info['f2']
-                    f3 = rowproxy['f3'] != info['f3']
-                    f4 = rowproxy['f4'] != info['f4']
-                    flag = f2 or f3 or f4
-                    if flag is False:
-                        continue
+                # if rowcount > 0:
+                #     rowproxy = tablesResultProxy.first()
+                #     if info['f2'] == '0' and info['f3'] == '0' and info['f4'] == '0':
+                #         continue
+                #     if info['f2'] == 0 and info['f3'] == 0 and info['f4'] == 0:
+                #         continue
+                #     f2 = rowproxy['f2'] != info['f2']
+                #     f3 = rowproxy['f3'] != info['f3']
+                #     f4 = rowproxy['f4'] != info['f4']
+                #     flag = f2 or f3 or f4
+                #     if flag is False:
+                #         continue
                 s1 = '`'
                 s2 = '\''
                 tName = "{}{}{}".format(s1, table_name, s1)
