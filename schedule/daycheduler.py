@@ -18,6 +18,6 @@ def job():
 
 
 scheduler = BackgroundScheduler()
-scheduler.add_job(job, 'cron', hour=0, minute=50)
+scheduler.add_job(job, 'cron', hour=1, minute=45)
 # scheduler.add_job(job, 'cron', hour=18, minute=00)
 # scheduler.add_job(job, 'interval', seconds=36000, next_run_time=datetime.datetime.now())
