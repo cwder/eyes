@@ -15,7 +15,7 @@ ADD . /code
 
 WORKDIR /code
 
-RUN pip install -r requirements.txt
+RUN pipe install -r requirements.txt
 EXPOSE 9999
 
 CMD ["python","app.py"]
