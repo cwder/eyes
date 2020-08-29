@@ -16,7 +16,7 @@ ADD . /code
 WORKDIR /code
 
 RUN pip install -r requirements.txt
-
+RUN pip install baostock -i https://pypi.tuna.tsinghua.edu.cn/simple/ --trusted-host pypi.tuna.tsinghua.edu.cn
 EXPOSE 9999
 
 CMD ["python","app.py"]
