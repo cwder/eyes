@@ -2,7 +2,7 @@ import datetime
 
 from apscheduler.schedulers.background import BackgroundScheduler
 
-from bs.building import Build
+# from bs.building import Build
 from config.config import EyesConfig
 from spider.cwd import Cwd
 from spider.final_spider import EyesShare
@@ -13,7 +13,8 @@ from spider.old_shares_spider2 import OldShare2
 
 def job():
     EyesConfig.initLog()
-    c = Build()
+    # c = Build()
+    c = Cwd()
     c.run()
 
 
