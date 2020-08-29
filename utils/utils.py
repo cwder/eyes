@@ -1,4 +1,4 @@
-from datetime import date, datetime
+import datetime
 import time
 
 
@@ -26,7 +26,29 @@ class Utils:
                 array[i] = default
         return array
 
+    @staticmethod
+    def compareDate(date1, date2, fmt='%Y-%m-%d'):
+        """
+            比较两个真实日期之间的大小，date1 > date2 则返回True
+            :param date1:
+            :param date2:
+            :param fmt:
+            :return:
+            """
+
+        zero = datetime.datetime.fromtimestamp(0)
+        try:
+            d1 = datetime.datetime.strptime(str(date1), fmt)
+        except:
+            d1 = zero
+        try:
+            d2 = datetime.datetime.strptime(str(date2), fmt)
+        except:
+            d2 = zero
+        return d1 > d2
+
 
 if __name__ == '__main__':
-    a = Utils.getTableString('2020-09-01')
+    a = '2020-09-01'
+    d1 = datetime.datetime.strptime(a, '%Y-%m-%d')
     print(a)

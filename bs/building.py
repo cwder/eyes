@@ -21,9 +21,7 @@ class Build:
         tableKeys = tablesResultProxy.keys()
         for rowproxy in tablesResultProxy:
             for key in tableKeys:
-                print(key)
                 allTables.append(rowproxy[key])
-                print(rowproxy[key])
         tablesResultProxy.close()
         # rs = bs.query_all_stock(day=Utils.getTime())
         rs = bs.query_all_stock('2020-08-28')
@@ -37,14 +35,26 @@ class Build:
                           "code varchar(15),open float,high float," \
                           "low float,close float,preclose float,volume bigint,amount bigint,adjustflag int,turn float," \
                           "tradestatus int,pctChg float,peTTM float,pbMRQ float,psTTM float," \
-                          "pcfNcfTTM float,isST int)".format(tName)
+                          "pcfNcfTTM float,isST int,a1 varchar(10),a2 varchar(10),a3 varchar(10),a4 varchar(10),a5 varchar(10),a6 varchar(10)" \
+                          ",a7 varchar(10),a8 varchar(10),a9 varchar(10),a10 varchar(10))".format(tName)
                     session.execute(sql)
                     allTables.append(tableName)
         for tableName in allTables:
+            tName = Utils.getTableName(tableName)
+            sql = "select * from {} order by date desc".format(tName)
+            tablesResultProxy = session.execute(sql)
+            rowcount = len(tablesResultProxy._saved_cursor._result.rows)
+            start_date = '2019-01-01'
+            if rowcount > 0:
+                rowproxy = tablesResultProxy.first()
+                lastDay = rowproxy['date']
+                # 当前日期比库中日期大
+                if Utils.compareDate(Utils.getTime(), lastDay):
+                    start_date = Utils.getTime()
             # 查每个表情况
             rs = bs.query_history_k_data_plus(tableName,
                                               "date,code,open,high,low,close,preclose,volume,amount,adjustflag,turn,tradestatus,pctChg,peTTM,pbMRQ,psTTM,pcfNcfTTM,isST",
-                                              start_date='2020-08-01', end_date=Utils.getTime(),
+                                              start_date=start_date,
                                               frequency="d", adjustflag="2")
             while (rs.error_code == '0') & rs.next():
                 tName = Utils.getTableName(tableName)
@@ -66,5 +76,15 @@ class Build:
 
 
 if __name__ == '__main__':
-    b = Build()
-    b.run()
+    session = Session()
+    sql = "select * from `sh.600000` order by date desc"
+    tablesResultProxy = session.execute(sql)
+    rowcount = len(tablesResultProxy._saved_cursor._result.rows)
+    if rowcount > 0:
+        rowproxy = tablesResultProxy.first()
+        # a = rowproxy['date']
+        a = '2020-09-01'
+        b = Utils.compareDate(Utils.getTime(),a)
+        print(rowproxy['date'])
+    # b = Build()
+    # b.run()
