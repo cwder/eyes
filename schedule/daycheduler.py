@@ -13,7 +13,7 @@ from spider.old_shares_spider2 import OldShare2
 
 def job():
     EyesConfig.initLog()
-    c = Build()
+    c = Cwd()
     c.run()
 
 
