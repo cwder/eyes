@@ -47,6 +47,10 @@ class Utils:
             d2 = zero
         return d1 > d2
 
+    @staticmethod
+    def compareTuple(tupleA, tupleB):
+        return tupleA[0] > tupleB[0]
+
 
 if __name__ == '__main__':
     a = '2020-09-01'

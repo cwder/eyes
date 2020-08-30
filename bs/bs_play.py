@@ -1,7 +1,7 @@
 import baostock as bs
 import pandas as pd
 
-from utils.utils import Utils
+from common.utils import Utils
 
 lg = bs.login()
 print('login respond error_code:'+lg.error_code)

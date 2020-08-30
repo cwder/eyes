@@ -3,7 +3,7 @@ import time
 import baostock as bs
 import pandas as pd
 from create_db import Base, engine, Session
-from utils.utils import Utils
+from common.utils import Utils
 
 
 class Build:
@@ -14,16 +14,18 @@ class Build:
         print('login respond  error_msg:' + self.lg.error_msg)
 
     def makeSql(self):
+        # 查看全表
         session = Session()
         allTables = []
-        session = Session()
         tablesResultProxy = session.execute('show tables')
         tableKeys = tablesResultProxy.keys()
         for rowproxy in tablesResultProxy:
             for key in tableKeys:
+                # 所有表放进allTables
                 allTables.append(rowproxy[key])
         tablesResultProxy.close()
         # rs = bs.query_all_stock(day=Utils.getTime())
+        # 查询所有股票代码
         rs = bs.query_all_stock('2020-08-28')
         while (rs.error_code == '0') & rs.next():
             tableName = rs.get_row_data()[0]
@@ -35,8 +37,8 @@ class Build:
                           "code varchar(15),open float,high float," \
                           "low float,close float,preclose float,volume bigint,amount bigint,adjustflag int,turn float," \
                           "tradestatus int,pctChg float,peTTM float,pbMRQ float,psTTM float," \
-                          "pcfNcfTTM float,isST int,a1 varchar(10),a2 varchar(10),a3 varchar(10),a4 varchar(10),a5 varchar(10),a6 varchar(10)" \
-                          ",a7 varchar(10),a8 varchar(10),a9 varchar(10),a10 varchar(10))".format(tName)
+                          "pcfNcfTTM float,isST int)".format(tName)
+                    # 建表
                     session.execute(sql)
                     allTables.append(tableName)
         for tableName in allTables:
@@ -45,6 +47,7 @@ class Build:
             tablesResultProxy = session.execute(sql)
             rowcount = len(tablesResultProxy._saved_cursor._result.rows)
             start_date = '2019-01-01'
+            # 表内容大于0
             if rowcount > 0:
                 rowproxy = tablesResultProxy.first()
                 lastDay = rowproxy['date']
@@ -58,14 +61,17 @@ class Build:
                                               frequency="d", adjustflag="2")
             while (rs.error_code == '0') & rs.next():
                 tName = Utils.getTableName(tableName)
+                # 处理有空串的情况
                 data = Utils.makeArrNotNull(rs.get_row_data(), '0')
                 print(data)
+                # date和code 外面加''
                 data[0] = Utils.getTableString(data[0])
                 data[1] = Utils.getTableString(data[1].split('.')[1])
                 sql = "INSERT INTO {} (date,code,open,high,low,close,preclose,volume,amount,adjustflag,turn,tradestatus,pctChg,peTTM,pbMRQ,psTTM,pcfNcfTTM,isST) " \
                       "VALUE ({},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}) " \
                     .format(tName, *data)
                 print(sql)
+                # 插入
                 session.execute(sql)
                 session.commit()
         Session.remove()
@@ -76,15 +82,4 @@ class Build:
 
 
 if __name__ == '__main__':
-    session = Session()
-    sql = "select * from `sh.600000` order by date desc"
-    tablesResultProxy = session.execute(sql)
-    rowcount = len(tablesResultProxy._saved_cursor._result.rows)
-    if rowcount > 0:
-        rowproxy = tablesResultProxy.first()
-        # a = rowproxy['date']
-        a = '2020-09-01'
-        b = Utils.compareDate(Utils.getTime(),a)
-        print(rowproxy['date'])
-    # b = Build()
-    # b.run()
+    pass
