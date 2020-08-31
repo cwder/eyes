@@ -12,7 +12,7 @@ class Db:
         tableKeys = tablesResultProxy.keys()
         for rowproxy in tablesResultProxy:
             for key in tableKeys:
-                tName = Utils.getTableName(rowproxy[key])
+                tName = Utils.formatTableName(rowproxy[key])
                 delSql = 'alter table {} DROP COLUMN a1,DROP COLUMN a2,' \
                          'DROP COLUMN a3,DROP COLUMN a4,DROP COLUMN a5,DROP COLUMN a6,' \
                          'DROP COLUMN a7,DROP COLUMN a8,DROP COLUMN a9,DROP COLUMN a10,'.format(tName);
@@ -22,7 +22,7 @@ class Db:
 
 if __name__ == '__main__':
     session = Session()
-    tName = Utils.getTableName('sh.600000')
+    tName = Utils.formatTableName('sh.600000')
     delSql = 'alter table {} DROP COLUMN a1,DROP COLUMN a2,' \
              'DROP COLUMN a3,DROP COLUMN a4,DROP COLUMN a5,DROP COLUMN a6,' \
              'DROP COLUMN a7,DROP COLUMN a8,DROP COLUMN a9,DROP COLUMN a10'.format(tName)

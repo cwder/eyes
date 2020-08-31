@@ -29,10 +29,19 @@ def task1():
     session = Session()
     resultProxy = session.execute('select pctChg from `sh.600000`')
     result = resultProxy.fetchall()
-    max
+    max = 0
+    now = 0
     for i, element in enumerate(result):
-        print(element)
-
+        if element[0] < 0:
+            now += 1
+        else:
+            if now > max:
+                max = now
+                print(max)
+                print(element[0])
+            now = 0
+    print('max   %d' % max)
+    print('now   %d' % now)
 
 if __name__ == '__main__':
     task1()

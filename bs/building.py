@@ -32,17 +32,17 @@ class Build:
             # 有新表
             if (tableName not in allTables):
                 if tableName.startswith('sh.6') or tableName.startswith('sz.0'):
-                    tName = Utils.getTableName(tableName)
+                    tName = Utils.formatTableName(tableName)
                     sql = "create table {} (id int primary key auto_increment,create_time datetime NOT NULL DEFAULT NOW(),date date," \
-                          "code varchar(15),open float,high float," \
-                          "low float,close float,preclose float,volume bigint,amount bigint,adjustflag int,turn float," \
+                          "code varchar(15),open float(10,2),high float(10,2)," \
+                          "low float(10,2),close float(10,2),preclose float(10,2),volume bigint,amount bigint,adjustflag int,turn float," \
                           "tradestatus int,pctChg float,peTTM float,pbMRQ float,psTTM float," \
                           "pcfNcfTTM float,isST int)".format(tName)
                     # 建表
                     session.execute(sql)
                     allTables.append(tableName)
         for tableName in allTables:
-            tName = Utils.getTableName(tableName)
+            tName = Utils.formatTableName(tableName)
             sql = "select * from {} order by date desc".format(tName)
             tablesResultProxy = session.execute(sql)
             rowcount = len(tablesResultProxy._saved_cursor._result.rows)
@@ -60,7 +60,7 @@ class Build:
                                               start_date=start_date,
                                               frequency="d", adjustflag="2")
             while (rs.error_code == '0') & rs.next():
-                tName = Utils.getTableName(tableName)
+                tName = Utils.formatTableName(tableName)
                 # 处理有空串的情况
                 data = Utils.makeArrNotNull(rs.get_row_data(), '0')
                 print(data)

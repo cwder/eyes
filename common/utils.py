@@ -8,10 +8,16 @@ class Utils:
         return time.strftime("%Y-%m-%d", time.localtime())
 
     @staticmethod
-    def getTableName(name):
+    def formatTableName(name):
         s1 = '`'
         tName = "{}{}{}".format(s1, name, s1)
         return tName
+
+    @staticmethod
+    def formatField(field):
+        s1 = '\''
+        field = "{}{}{}".format(s1, field, s1)
+        return field
 
     @staticmethod
     def getTableString(field):
@@ -50,6 +56,25 @@ class Utils:
     @staticmethod
     def compareTuple(tupleA, tupleB):
         return tupleA[0] > tupleB[0]
+
+    @staticmethod
+    def bornTableNameForNumber(tName):
+        if tName.startswith('0'):
+            tName = 'sz.' + tName
+        if tName.startswith('6'):
+            tName = 'sh.' + tName
+        tName = Utils.formatTableName(tName)
+        return tName
+
+    @staticmethod
+    def bornTableName(tName):
+        if tName.startswith('0'):
+            tName = 'sz.' + tName
+        if tName.startswith('6'):
+            tName = 'sh.' + tName
+        s1 = '\''
+        tName = "{}{}{}".format(s1, tName, s1)
+        return tName
 
 
 if __name__ == '__main__':
