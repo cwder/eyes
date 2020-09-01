@@ -2,6 +2,7 @@ import re
 
 import requests
 
+from analysis.zygote import task1
 from common import const
 from common.utils import Utils
 from create_db import Session
@@ -59,19 +60,23 @@ class ImmediateSpider:
             orgTableName = info.get('f12')
             if orgTableName.startswith('3'):
                 continue
+            # 证明存在该表
             table_name = Utils.bornTableName(orgTableName)
             sql = "show tables like {}".format(table_name)
             tablesResultProxy = session.execute(sql)
             rowcount = len(tablesResultProxy._saved_cursor._result.rows)
+            tablesResultProxy.close()
             if rowcount == 0:
                 continue
-            tablesResultProxy.close()
-            sql = "select * from {} where date = {}".format(Utils.bornTableNameForNumber(orgTableName), Utils.formatField(Utils.getTime()))
-            tablesResultProxy = session.execute(sql)
-            rowproxy = tablesResultProxy.first()
-            print(rowproxy[const.CONST_DATE])
-            print(rowproxy[const.CONST_CODE])
-            print(rowproxy[const.CONST_OPEN])
+            # 执行
+            task1(info, orgTableName)
+
+            # sql = "select * from {} where date = {}".format(Utils.bornTableNameForNumber(orgTableName), Utils.formatField(Utils.getTime()))
+            # tablesResultProxy = session.execute(sql)
+            # rowproxy = tablesResultProxy.first()
+            # print(rowproxy[const.CONST_DATE])
+            # print(rowproxy[const.CONST_OPEN])
+            # print(rowproxy[const.CONST_OPEN])
         Session.remove()
 
 

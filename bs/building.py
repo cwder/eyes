@@ -31,14 +31,17 @@ class Build:
             tableName = rs.get_row_data()[0]
             # 有新表
             if (tableName not in allTables):
+                # 科创版不要
+                if tableName.startswith('sh.688'):
+                    continue
                 if tableName.startswith('sh.6') or tableName.startswith('sz.0'):
                     tName = Utils.formatTableName(tableName)
                     sql = "create table {} (id int primary key auto_increment,create_time datetime NOT NULL DEFAULT NOW(),date date," \
-                          "code varchar(15),open float(10,2),high float(10,2)," \
-                          "low float(10,2),close float(10,2),preclose float(10,2),volume bigint,amount bigint,adjustflag int,turn float," \
+                          "code varchar(15),open float,high float," \
+                          "low float,close float,preclose float,volume bigint,amount bigint,adjustflag int,turn float," \
                           "tradestatus int,pctChg float,peTTM float,pbMRQ float,psTTM float," \
-                          "pcfNcfTTM float,isST int)".format(tName)
-                    # 建表
+                          "pcfNcfTTM float,isST int,a1 varchar(10),a2 varchar(10),a3 varchar(10),a4 varchar(10),a5 varchar(10),a6 varchar(10)" \
+                          ",a7 varchar(10),a8 varchar(10),a9 varchar(10),a10 varchar(10))".format(tName)
                     session.execute(sql)
                     allTables.append(tableName)
         for tableName in allTables:
