@@ -27,20 +27,23 @@ from create_db import Session
 # 算出最长 不涨 的日期长度，目前是否处于该位置
 def task1(info, table_name):
     session = Session()
-    resultProxy = session.execute('select pctChg from {}'.format(Utils.bornTableNameForNumber(table_name)))
+    resultProxy = session.execute(
+        'select * from {} order by date desc'.format(Utils.bornTableNameForNumber(table_name)))
     result = resultProxy.fetchall()
     max = 0
     now = 0
     for i, element in enumerate(result):
-        if element[0] < 0:
+        if element['pctChg'] < 0:
             now += 1
         else:
             if now > max:
                 max = now
             now = 0
-    print('max   %d' % max)
-    print('now   %d' % now)
-    print('f3   %d' % info['f3'])
+        if info['f3'] < 0:
+            now += 1
+            if now > max:
+                print(info['f14'])
+
 
 
 if __name__ == '__main__':

@@ -36,11 +36,11 @@ class ImmediateSpider:
         self.text = response.text.replace('-', '0')
         p1 = re.compile(r'[(](.*?)[)]', re.S)
         res = re.search(p1, self.text)
-        print(res)
+        # print(res)
         if res is not None:
             try:
                 data_list = eval(res.group()[1:-1])['data']['diff']
-                print(data_list)
+                # print(data_list)
                 # data_list [{'f1': 2, 'f2': 252.61, 'f3': 468.05, 'f4': 208.14,
                 self.data_list.extend(data_list)
             except Exception as e:

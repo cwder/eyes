@@ -7,7 +7,7 @@ from sqlalchemy.orm import sessionmaker, scoped_session
 from config.config import db_info
 engine = create_engine(
     db_info["uri"],
-    echo=True,
+    echo=False,
     pool_pre_ping=True,
     pool_recycle=3600
 )

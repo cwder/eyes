@@ -76,8 +76,16 @@ class Utils:
         tName = "{}{}{}".format(s1, tName, s1)
         return tName
 
+    @staticmethod
+    def floatTo2(num1):
+        r = round(num1, 2)
+        return r
+
 
 if __name__ == '__main__':
-    a = '2020-09-01'
-    d1 = datetime.datetime.strptime(a, '%Y-%m-%d')
-    print(a)
+    # a = '2020-09-01'
+    # d1 = datetime.datetime.strptime(a, '%Y-%m-%d')
+    a = 0.0133
+    b = Utils.floatTo2(a)
+    print(b)
+    # print(Utils.isEqual(a, b))
