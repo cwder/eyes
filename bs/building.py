@@ -36,16 +36,16 @@ class Build:
                     continue
                 if tableName.startswith('sh.6') or tableName.startswith('sz.0'):
                     tName = Utils.formatTableName(tableName)
-                    sql = "create table {} (id int primary key auto_increment,行情日期 date," \
-                          "证券代码 varchar(15),今开盘价格 float,最高价 float," \
-                          "最低价 float,今收盘价 float,昨日收盘价 float,成交数量 bigint,成交金额 bigint,复权状态 int,换手率 float," \
-                          "交易状态 int,涨跌幅 float,滚动市盈率 float,市净率 float,滚动市销率 float," \
-                          "滚动市现率 float,是否ST int,创建时间 datetime NOT NULL DEFAULT NOW(),extra varchar(255))".format(tName)
+                    sql = "create table {} (id int primary key auto_increment,create_time datetime NOT NULL DEFAULT NOW(),date date," \
+                          "code varchar(15),open float,high float," \
+                          "low float,close float,preclose float,volume bigint,amount bigint,adjustflag int,turn float," \
+                          "tradestatus int,pctChg float,peTTM float,pbMRQ float,psTTM float," \
+                          "pcfNcfTTM float,isST int,extra varchar(255))".format(tName)
                     session.execute(sql)
                     allTables.append(tableName)
         for tableName in allTables:
             tName = Utils.formatTableName(tableName)
-            sql = "select * from {} order by 行情日期 desc".format(tName)
+            sql = "select * from {} order by date desc".format(tName)
             tablesResultProxy = session.execute(sql)
             rowcount = len(tablesResultProxy._saved_cursor._result.rows)
             start_date = '2019-01-01'
@@ -69,7 +69,7 @@ class Build:
                 # date和code 外面加''
                 data[0] = Utils.getTableString(data[0])
                 data[1] = Utils.getTableString(data[1].split('.')[1])
-                sql = "INSERT INTO {} (行情日期,证券代码,今开盘价格,最高价,最低价,今收盘价,昨日收盘价,成交数量,成交金额,复权状态,换手率,交易状态,涨跌幅,滚动市盈率,市净率,滚动市销率,滚动市现率,是否ST) " \
+                sql = "INSERT INTO {} (date,code,open,high,low,close,preclose,volume,amount,adjustflag,turn,tradestatus,pctChg,peTTM,pbMRQ,psTTM,pcfNcfTTM,isST) " \
                       "VALUE ({},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}) " \
                     .format(tName, *data)
                 print(sql)
@@ -84,5 +84,4 @@ class Build:
 
 
 if __name__ == '__main__':
-    c = Build()
-    c.run()
+    pass
