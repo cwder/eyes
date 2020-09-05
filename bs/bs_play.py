@@ -7,7 +7,7 @@ lg = bs.login()
 print('login respond error_code:'+lg.error_code)
 print('login respond  error_msg:'+lg.error_msg)
 
-rs = bs.query_history_k_data_plus("sh.600234",
+rs = bs.query_history_k_data_plus("sh.600000",
     "date,code,open,high,low,close,preclose,volume,amount,adjustflag,turn,tradestatus,pctChg,peTTM,pbMRQ,psTTM,pcfNcfTTM,isST",
     start_date='2020-08-01',
     frequency="d", adjustflag="3") #frequency="d"取日k线，adjustflag="3"默认不复权

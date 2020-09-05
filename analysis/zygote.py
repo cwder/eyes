@@ -29,12 +29,12 @@ from create_db import Session
 # 算出最长 不涨 的日期长度，目前是否处于该位置
 def task1(table_name, info=None):
     session = Session()
+    sqlTName = Utils.bornTableNameForNumber(table_name)
     resultProxy = session.execute(
-        'select * from {} order by date asc'.format(Utils.bornTableNameForNumber(table_name)))
+        'select * from {} order by date asc'.format(sqlTName))
     result = resultProxy.fetchall()
     max = 0
     now = 0
-    table_pctchg = 0
     for i, element in enumerate(result):
         table_pctchg = element['pctChg']
         if table_pctchg < 0:
@@ -43,20 +43,22 @@ def task1(table_name, info=None):
             if now > max:
                 max = now
             now = 0
-    if now == 0:
-        return
+    date = result[-1]['date']
+    resultProxy.close()
+    sql = "insert into zygote (name, code, now_date,his_low_days,now_low_days) values ({},{},{},{},{})".format(info['f3'], table_name,date, max, now)
+    session.execute(sql)
+    session.commit()
 
-
-    if info is None:
-        return
-    info_res = info['f3']
-    if info_res == '-' or info_res == '':
-        return
-    if info_res < 0 and math.isclose(info_res, Utils.floatTo2(table_pctchg) == False):
-        now += 1
-        if now > max:
-            print('table----A ' + info['f14'] + ' ' + info['f12'])
+    # if info is None:
+    #     return
+    # info_res = info['f3']
+    # if info_res == '-' or info_res == '':
+    #     return
+    # if info_res < 0 and math.isclose(info_res, Utils.floatTo2(table_pctchg) == False):
+    #     now += 1
+    #     if now > max:
+    #         print('table----A ' + info['f14'] + ' ' + info['f12'])
 
 
 if __name__ == '__main__':
-    task1('600015')
+    task1('600000')
