@@ -36,11 +36,11 @@ class Build:
                     continue
                 if tableName.startswith('sh.6') or tableName.startswith('sz.0'):
                     tName = Utils.formatTableName(tableName)
-                    sql = "create table {} (id int primary key auto_increment,create_time datetime NOT NULL DEFAULT NOW(),date date," \
+                    sql = "create table {} (id int primary key auto_increment,date date," \
                           "code varchar(15),open float,high float," \
                           "low float,close float,preclose float,volume bigint,amount bigint,adjustflag int,turn float," \
                           "tradestatus int,pctChg float,peTTM float,pbMRQ float,psTTM float," \
-                          "pcfNcfTTM float,isST int,extra varchar(255))".format(tName)
+                          "pcfNcfTTM float,isST int,extra varchar(255)),create_time datetime NOT NULL DEFAULT NOW()".format(tName)
                     session.execute(sql)
                     allTables.append(tableName)
         for tableName in allTables:
@@ -84,4 +84,5 @@ class Build:
 
 
 if __name__ == '__main__':
-    pass
+    c = Build()
+    c.run()
