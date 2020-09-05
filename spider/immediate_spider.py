@@ -33,7 +33,7 @@ class ImmediateSpider:
     def parseSingleHtml(self, url):
         response = requests.get(url, timeout=20, headers=self.headers)
         response.encoding = 'utf8'
-        self.text = response.text.replace('-', '0')
+        self.text = response.text
         p1 = re.compile(r'[(](.*?)[)]', re.S)
         res = re.search(p1, self.text)
         # print(res)
@@ -69,7 +69,7 @@ class ImmediateSpider:
             if rowcount == 0:
                 continue
             # 执行
-            task1(info, orgTableName)
+            task1(orgTableName, info)
 
             # sql = "select * from {} where date = {}".format(Utils.bornTableNameForNumber(orgTableName), Utils.formatField(Utils.getTime()))
             # tablesResultProxy = session.execute(sql)
