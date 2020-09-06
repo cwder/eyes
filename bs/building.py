@@ -15,6 +15,17 @@ class Build:
         print('login respond error_code:' + self.lg.error_code)
         print('login respond  error_msg:' + self.lg.error_msg)
 
+    @staticmethod
+    def buildBaseTable():
+        session = Session()
+        sql = "SHOW TABLES LIKE 'zygote'"
+        resultProxy = session.execute(sql)
+        result = resultProxy.first()
+        if result is None:
+            sql = "create table `zygote` (id int primary key auto_increment,code varchar(10),his_low_days int ,now_low_days int,is_max_lowing int, update_time datetime NOT NULL DEFAULT NOW())"
+            session.execute(sql)
+        Session.remove()
+
     def makeSql(self):
         # 查看全表
         session = Session()
@@ -82,6 +93,7 @@ class Build:
         Session.remove()
 
     def run(self):
+        Build.buildBaseTable()
         self.makeSql()
         bs.logout()
 
