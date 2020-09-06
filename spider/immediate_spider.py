@@ -2,7 +2,7 @@ import re
 
 import requests
 
-from analysis.zygote import task1
+from analysis.zygote import taskMaxLow
 from common import const
 from common.utils import Utils
 from create_db import Session
@@ -69,7 +69,7 @@ class ImmediateSpider:
             if rowcount == 0:
                 continue
             # 执行
-            task1(orgTableName, info)
+            taskMaxLow(orgTableName, info)
 
             # sql = "select * from {} where date = {}".format(Utils.bornTableNameForNumber(orgTableName), Utils.formatField(Utils.getTime()))
             # tablesResultProxy = session.execute(sql)

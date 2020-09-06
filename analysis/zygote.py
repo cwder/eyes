@@ -27,11 +27,11 @@ from create_db import Session
 
 
 # 算出最长 不涨 的日期长度，目前是否处于该位置
-def task1(table_name, info=None):
+def taskMaxLow(table_name):
     session = Session()
-    sqlTName = Utils.bornTableNameForNumber(table_name)
+    tName = Utils.formatTableName(table_name)
     resultProxy = session.execute(
-        'select * from {} order by date asc'.format(sqlTName))
+        'select * from {} order by date asc'.format(tName))
     result = resultProxy.fetchall()
     max = 0
     now = 0
@@ -43,11 +43,17 @@ def task1(table_name, info=None):
             if now > max:
                 max = now
             now = 0
-    date = result[-1]['date']
+    code = result[-1]['code']
     resultProxy.close()
-    sql = "insert into zygote (name, code, now_date,his_low_days,now_low_days) values ({},{},{},{},{})".format(info['f3'], table_name,date, max, now)
+    if now >= max:
+        isMaxLowing = 1
+    else:
+        isMaxLowing = 0
+    sql = "insert into zygote (code,his_low_days,now_low_days,is_max_lowing) values ({},{},{},{})".format(
+        code, max, now, isMaxLowing)
     session.execute(sql)
     session.commit()
+    Session.remove()
 
     # if info is None:
     #     return
@@ -61,4 +67,4 @@ def task1(table_name, info=None):
 
 
 if __name__ == '__main__':
-    task1('600000')
+    taskMaxLow('600000')

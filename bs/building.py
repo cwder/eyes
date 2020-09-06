@@ -2,6 +2,8 @@ import time
 
 import baostock as bs
 import pandas as pd
+
+from analysis.zygote import taskMaxLow
 from create_db import Base, engine, Session
 from common.utils import Utils
 
@@ -76,6 +78,7 @@ class Build:
                 # 插入
                 session.execute(sql)
                 session.commit()
+            taskMaxLow(tableName)
         Session.remove()
 
     def run(self):
