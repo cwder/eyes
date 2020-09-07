@@ -53,7 +53,7 @@ class Build:
                           "code varchar(15),open float,high float," \
                           "low float,close float,preclose float,volume bigint,amount bigint,adjustflag int,turn float," \
                           "tradestatus int,pctChg float,peTTM float,pbMRQ float,psTTM float," \
-                          "pcfNcfTTM float,isST int,extra varchar(255)),create_time datetime NOT NULL DEFAULT NOW()".format(tName)
+                          "pcfNcfTTM float,isST int,extra varchar(255),create_time datetime NOT NULL DEFAULT NOW())".format(tName)
                     session.execute(sql)
                     allTables.append(tableName)
         for tableName in allTables:
