@@ -1,4 +1,5 @@
 import time
+from datetime import timedelta
 
 import baostock as bs
 import pandas as pd
@@ -70,7 +71,8 @@ class Build:
                 lastDay = rowproxy['date']
                 # 当前日期比库中日期大
                 if Utils.compareDate(Utils.getTime(), lastDay):
-                    start_date = Utils.getTime()
+                    nextDay = lastDay + timedelta(days=1)
+                    start_date = nextDay.strftime('%Y-%m-%d')
             # 查每个表情况
             rs = bs.query_history_k_data_plus(tableName,
                                               "date,code,open,high,low,close,preclose,volume,amount,adjustflag,turn,tradestatus,pctChg,peTTM,pbMRQ,psTTM,pcfNcfTTM,isST",
