@@ -65,6 +65,9 @@ def taskMaxLow(table_name):
     #     if now > max:
     #         print('table----A ' + info['f14'] + ' ' + info['f12'])
 
+# 算出跟大盘同涨跌的股票
+def taskFetchLine():
+    pass
 
 if __name__ == '__main__':
     taskMaxLow('600000')

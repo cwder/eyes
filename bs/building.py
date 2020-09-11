@@ -48,7 +48,7 @@ class Build:
                 # 科创版不要
                 if tableName.startswith('sh.688'):
                     continue
-                if tableName.startswith('sh.6') or tableName.startswith('sz.0'):
+                if tableName.startswith('sh.6') or tableName.startswith('sz.0') or tableName.startswith('sh.000001'):
                     tName = Utils.formatTableName(tableName)
                     sql = "create table {} (id int primary key auto_increment,date date," \
                           "code varchar(15),open float,high float," \
