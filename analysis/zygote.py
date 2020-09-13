@@ -49,8 +49,9 @@ def taskMaxLow(table_name):
         isMaxLowing = 1
     else:
         isMaxLowing = 0
+    sCode = Utils.getTableString(code)
     sql = "insert into zygote (code,his_low_days,now_low_days,is_max_lowing) values ({},{},{},{})".format(
-        code, max, now, isMaxLowing)
+        sCode, max, now, isMaxLowing)
     session.execute(sql)
     session.commit()
     Session.remove()
@@ -65,7 +66,7 @@ def taskMaxLow(table_name):
     #     if now > max:
     #         print('table----A ' + info['f14'] + ' ' + info['f12'])
 
-# 算出跟大盘同涨跌的股票
+# 算出跟大盘同涨跌的股票，算出大盘连涨趋势，推算出该股趋势
 def taskFetchLine():
     pass
 
