@@ -23,7 +23,7 @@ class Build:
         resultProxy = session.execute(sql)
         result = resultProxy.first()
         if result is None:
-            sql = "create table `zygote` (id int primary key auto_increment,code varchar(10),his_low_days int ,now_low_days int,is_max_lowing int, update_time datetime NOT NULL DEFAULT NOW())"
+            sql = "create table `zygote` (id int primary key auto_increment,code varchar(10) unique,his_low_days int ,now_low_days int,is_max_lowing int, update_time datetime NOT NULL DEFAULT NOW())"
             session.execute(sql)
         Session.remove()
 

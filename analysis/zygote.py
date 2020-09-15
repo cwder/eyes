@@ -50,8 +50,8 @@ def taskMaxLow(table_name):
     else:
         isMaxLowing = 0
     sCode = Utils.getTableString(code)
-    sql = "insert into zygote (code,his_low_days,now_low_days,is_max_lowing) values ({},{},{},{})".format(
-        sCode, max, now, isMaxLowing)
+    sql = "insert into zygote (code,his_low_days,now_low_days,is_max_lowing) values ({},{},{},{}) on duplicate key update code = {}".format(
+        sCode, max, now, isMaxLowing, sCode)
     session.execute(sql)
     session.commit()
     Session.remove()
