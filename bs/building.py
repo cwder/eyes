@@ -4,7 +4,7 @@ from datetime import timedelta
 import baostock as bs
 import pandas as pd
 
-from analysis.zygote import taskMaxLow
+from analysis.zygote import taskMaxLow, taskBeat601069
 from create_db import Base, engine, Session
 from common.utils import Utils
 
@@ -94,6 +94,7 @@ class Build:
                 session.execute(sql)
                 session.commit()
             taskMaxLow(tableName)
+        taskBeat601069()
         Session.remove()
 
     def run(self):

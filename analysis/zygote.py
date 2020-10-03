@@ -74,9 +74,78 @@ def taskMaxLow(table_name):
     #     if now > max:
     #         print('table----A ' + info['f14'] + ' ' + info['f12'])
 
+
 # 算出跟大盘同涨跌的股票，算出大盘连涨趋势，推算出该股趋势
-def taskFetchLine():
-    pass
+# 西金 20200930：
+# 最高：18.28,最低：12.54
+# 总天数：427
+# 14以下：97
+# 14-15: 203
+# 15-16: 88
+# 16以上: 39
+
+def taskBeat601069():
+    session = Session()
+
+    ysql = 'select * from `sh.000001`'
+    resultProxy = session.execute(ysql)
+    rowcount = len(resultProxy._saved_cursor._result.rows)
+    minDay = rowcount * 97 / 427
+
+    sql = "SHOW TABLES LIKE 'beat601069'"
+    resultProxy = session.execute(sql)
+    result = resultProxy.first()
+    if result is None:
+        sql = "create table `beat601069` (id int primary key auto_increment,code varchar(10) unique,isOk int, update_time datetime NOT NULL DEFAULT NOW())"
+        session.execute(sql)
+
+    tablesResultProxy = session.execute('show tables')
+    tableKeys = tablesResultProxy.keys()
+    for rowproxy in tablesResultProxy:
+        for key in tableKeys:
+            table_name = rowproxy[key]
+            if table_name.startswith('z') or table_name.startswith('beat'):
+                continue
+            tName = Utils.formatTableName(table_name)
+            sql = 'select * from {} order by id ASC limit 1'.format(tName)
+            resultProxy = session.execute(sql)
+            result = resultProxy.first()
+            date = result['date']
+            if str(date) != '2019-01-02' or result['isST'] == 1:
+                continue
+
+            sql = 'select min(close) , max(close) from {}'.format(tName)
+            resultProxy = session.execute(sql)
+            result = resultProxy.fetchall()
+            if result[0][0] < 10:
+                continue
+            # # 最高减最低
+            diff = result[0][1] - result[0][0]
+            # 差值与最高价的占比
+            res = float(diff / result[0][1])
+            # 底价 + 1/4 差价
+            dprice = result[0][0] + diff / 4
+            if res < 0.32:  # 0.32
+                sql2 = 'select * from {} where close < {}'.format(tName, dprice)
+                resultProxy = session.execute(sql2)
+                rowcount = len(resultProxy._saved_cursor._result.rows)
+                if rowcount <= minDay:
+                    low_price = result[0][0] * 1.12  # 西金 14.05-12.95 基准
+                    sql = 'select * from {} order by id DESC limit 1'.format(tName)
+                    resultProxy = session.execute(sql)
+                    result = resultProxy.first()
+                    now_close = result['close']
+                    isok = 0
+                    if now_close <= low_price:
+                        isok = 1
+                    sql = "replace into beat601069 (code,isOk) values ({},{})".format(
+                        Utils.getTableString(table_name), isok)
+                    session.execute(sql)
+                    session.commit()
+                    print(table_name)
+                    print(low_price)
+    Session.remove()
+
 
 if __name__ == '__main__':
-    taskMaxLow('600000')
+    taskBeat601069()
