@@ -96,7 +96,7 @@ def taskBeat601069():
     resultProxy = session.execute(sql)
     result = resultProxy.first()
     if result is None:
-        sql = "create table `beat601069` (id int primary key auto_increment,code varchar(10) unique,isOk int, update_time datetime NOT NULL DEFAULT NOW())"
+        sql = "create table `beat601069` (id int primary key auto_increment,code varchar(10) unique,level_1 int,level_2 int,level_3 int, update_time datetime NOT NULL DEFAULT NOW())"
         session.execute(sql)
 
     tablesResultProxy = session.execute('show tables')
@@ -117,33 +117,49 @@ def taskBeat601069():
             sql = 'select min(close) , max(close) from {}'.format(tName)
             resultProxy = session.execute(sql)
             result = resultProxy.fetchall()
-            if result[0][0] < 10:
+            low = result[0][0]
+            if low < 10:
                 continue
             # # 最高减最低
-            diff = result[0][1] - result[0][0]
+            diff = result[0][1] - low
             # 差值与最高价的占比
             res = float(diff / result[0][1])
             # 底价 + 1/4 差价
-            dprice = result[0][0] + diff / 4
+            dprice = low + diff / 4
             if res < 0.32:  # 0.32
                 sql2 = 'select * from {} where close < {}'.format(tName, dprice)
                 resultProxy = session.execute(sql2)
                 rowcount = len(resultProxy._saved_cursor._result.rows)
+                # 极端低价小于西金
                 if rowcount <= minDay:
-                    low_price = result[0][0] * 1.12  # 西金 14.05-12.95 基准
+                    low_price_1 = low * 1.12  # 西金 14.05-12.54 基准
+                    low_price_2 = low * 1.15
+                    low_price_3 = low * 1.18
                     sql = 'select * from {} order by id DESC limit 1'.format(tName)
                     resultProxy = session.execute(sql)
                     result = resultProxy.first()
                     now_close = result['close']
-                    isok = 0
-                    if now_close <= low_price:
-                        isok = 1
-                    sql = "replace into beat601069 (code,isOk) values ({},{})".format(
-                        Utils.getTableString(table_name), isok)
+                    if now_close <= low_price_1:
+                        sql = "replace into beat601069 (code,level_1,level_2,level_3) values ({},{},{},{})".format(
+                            Utils.getTableString(table_name), 1, 0, 0)
+                    elif now_close <= low_price_2:
+                        sql = "replace into beat601069 (code,level_1,level_2,level_3) values ({},{},{},{})".format(
+                            Utils.getTableString(table_name), 0, 1, 0)
+                    elif now_close <= low_price_3:
+                        sql = "replace into beat601069 (code,level_1,level_2,level_3) values ({},{},{},{})".format(
+                            Utils.getTableString(table_name), 0, 0, 1)
+                    else:
+                        sql = "replace into beat601069 (code,level_1,level_2,level_3) values ({},{},{},{})".format(
+                            Utils.getTableString(table_name), 0, 0, 0)
                     session.execute(sql)
                     session.commit()
                     print(table_name)
-                    print(low_price)
+                    print(low)
+                    print(now_close)
+                    print(low_price_1)
+                    print(low_price_2)
+                    print(low_price_3)
+                    print('------------')
     Session.remove()
 
 
