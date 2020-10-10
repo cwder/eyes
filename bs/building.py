@@ -58,7 +58,7 @@ class Build:
                     session.execute(sql)
                     allTables.append(tableName)
         for tableName in allTables:
-            if 'zygote' in tableName:
+            if not tableName.startswith('sz') or not tableName.startswith('sh'):
                 continue
             tName = Utils.formatTableName(tableName)
             sql = "select * from {} order by date desc".format(tName)
