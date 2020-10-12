@@ -126,7 +126,7 @@ def taskBeat601069():
             res = float(diff / result[0][1])
             # 底价 + 1/4 差价
             dprice = low + diff / 4
-            if res < 0.32:  # 0.32
+            if res < 0.42:  # 0.32
                 sql2 = 'select * from {} where close < {}'.format(tName, dprice)
                 resultProxy = session.execute(sql2)
                 rowcount = len(resultProxy._saved_cursor._result.rows)
