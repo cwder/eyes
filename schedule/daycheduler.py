@@ -11,6 +11,8 @@ def job():
     EyesConfig.initLog()
     c = Build()
     c.run()
+
+
 scheduler = BackgroundScheduler()
 scheduler.add_job(job, 'cron', hour=18, minute=00)
 # scheduler.add_job(job, 'cron', hour=18, minute=00)
